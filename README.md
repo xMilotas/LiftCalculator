@@ -1,10 +1,10 @@
 # Lift Calculator
 
-A Flutter app to use alongside the 5/3/1 trainings plan from Jim Wendler. 
+A Flutter app to use alongside the 5/3/1 routine from Jim Wendler. 
 
 ## Introduction
 
-There is currently no free Android App available to keep track of the 5/3/1 trainings plan - the only option follows a subscription model. 
+There is currently no free Android App available to keep track of the 5/3/1 routine - the only option follows a subscription model. 
 Thus, I decided to build my own. 
 
 This is my first project in Flutter, there are probabably a lot of things that could be done more efficient or in a different way - this is my way of learning something new, while giving it a purpose in my day to day life. 
