@@ -1,6 +1,7 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
-class Preferences{
+/// Simple class to interact with the shared preferences
+class Preferences {
   late SharedPreferences prefs;
 
   Preferences._create();
@@ -10,7 +11,7 @@ class Preferences{
     component.prefs = await SharedPreferences.getInstance();
     return component;
   }
-  
+
   // Writes a value to store
   setSharedPrefValue(String referenceVar, int value) async {
     await this.prefs.setInt(referenceVar, value);
@@ -19,10 +20,9 @@ class Preferences{
   }
 
   // Get a stored value
- Future<int> getSharedPrefValueInt(String referenceVar) async {
+  Future<int> getSharedPrefValueInt(String referenceVar) async {
     int value = this.prefs.getInt(referenceVar) ?? 0;
     print('Got value: $value for $referenceVar');
     return value;
   }
-
 }
