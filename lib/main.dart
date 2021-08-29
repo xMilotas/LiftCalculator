@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:liftcalculator/screens/home_screen.dart';
+import 'package:liftcalculator/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
 
 import 'package:liftcalculator/models/profile.dart';
@@ -28,7 +30,13 @@ class MyApp extends StatelessWidget {
           colorScheme: ColorScheme.dark(),
           iconTheme: IconThemeData(color: Colors.purple.shade200, opacity: 0.8),
         ),
-        home: TrainingMaxConfigScreen());
+        initialRoute: '/',
+        routes: {
+          '/': (context) => HomeScreen(),
+          '/settings': (context) => SettingsScreen(),
+          '/trainingConfig': (context) => TrainingMaxConfigScreen(),
+        },
+    );
   }
 }
 
@@ -43,9 +51,6 @@ class Splash extends StatelessWidget {
 }
 
 
-// With this we can only pass user profile to 1 screen, should probably switch to a different solution
-// Maybe use the boilerplate from the guy
-// I also don't like the "rebuilding" of the class
 
 // What defines a training? i.e. how is it calculated
 

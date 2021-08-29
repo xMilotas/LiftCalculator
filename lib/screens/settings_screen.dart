@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
 
-import 'package:liftcalculator/main.dart';
 import 'package:liftcalculator/models/profile.dart';
 import 'package:liftcalculator/util/preferences.dart';
 import 'package:provider/provider.dart';

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:liftcalculator/models/appBar.dart';
+import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/profile.dart';
-import 'package:liftcalculator/screens/settings_screen.dart';
 
 import 'package:liftcalculator/models/trainingMax.dart';
 import 'package:flutter/services.dart';
@@ -21,19 +22,8 @@ class _TrainingMaxConfigScreenState extends State<TrainingMaxConfigScreen> {
       return Splash();
     } else
       return Scaffold(
-        appBar: AppBar(
-          centerTitle: true,
-          title: Text('Lift Calculator'),
-          actions: [
-            IconButton(
-                icon: const Icon(Icons.settings),
-                tooltip: 'Settings',
-                onPressed: () {
-                  Navigator.of(context).push(MaterialPageRoute(
-                      builder: (context) => SettingsScreen()));
-                }),
-          ],
-        ),
+        appBar: buildAppBar(context),
+        drawer: buildDrawer(context),
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
             Column(
