@@ -12,7 +12,7 @@ buildDrawer(context) => Drawer(
           ),
           ListTile(
             leading: Icon(Icons.edit),
-            title: const Text('Configure TM'),
+            title: const Text('Configure 1RM/TM'),
             onTap: () {
               Navigator.pushReplacementNamed(context, '/trainingConfig');
             },
