@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:liftcalculator/screens/settings_screen.dart';
 
-buildAppBar(context) => AppBar(
+buildAppBar(context, [String? title]){
+String appBarTitle = 'Lift Calculator';
+if(title != null) appBarTitle = title;
+
+return AppBar(
       centerTitle: true,
-      title: Text('Lift Calculator'),
+      title: Text(appBarTitle),
       actions: [
         IconButton(
             icon: const Icon(Icons.settings),
@@ -17,3 +21,4 @@ buildAppBar(context) => AppBar(
           ),
       ],
     );
+}
