@@ -1,14 +1,19 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liftcalculator/models/profile.dart';
+import 'package:provider/provider.dart';
 
 class HomeCard {
   final String contentTitle;
   final String contentRow1;
   final String contentRow2;
   final String contentRow3;
+  bool changeable;
   String imageName;
 
-  HomeCard(this.contentTitle, this.contentRow1, this.contentRow2, this.contentRow3, this.imageName);
+  HomeCard(this.contentTitle, this.contentRow1, this.contentRow2,
+      this.contentRow3, this.imageName,
+      {this.changeable = false});
 }
 
 /// A card that navigates to a specific route
@@ -16,10 +21,13 @@ class TappableCard extends StatelessWidget {
   final String sectionTitle;
   final HomeCard cartContent;
   final String route;
-  
-  TappableCard({required this.sectionTitle, required this.cartContent, required this.route});
 
-  static const height = 298.0;
+  TappableCard(
+      {required this.sectionTitle,
+      required this.cartContent,
+      required this.route});
+
+  static const height = 313.0;
 
   @override
   Widget build(BuildContext context) {
@@ -52,9 +60,9 @@ class TappableCard extends StatelessWidget {
   }
 }
 
-class CardContent extends StatelessWidget{
+class CardContent extends StatelessWidget {
   final HomeCard _;
- CardContent(this._);
+  CardContent(this._);
 
   @override
   Widget build(BuildContext context) {
@@ -93,31 +101,86 @@ class CardContent extends StatelessWidget{
             ],
           ),
         ),
-        // Description and share/explore buttons.
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
           child: DefaultTextStyle(
             softWrap: false,
             overflow: TextOverflow.ellipsis,
             style: descriptionStyle!,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+            child: Row(
               children: [
-                Text(_.contentRow1),
-                Text(_.contentRow2),
-                Text(_.contentRow3),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(_.contentRow1),
+                    Text(_.contentRow2),
+                    Text(_.contentRow3),
+                  ],
+                ),
               ],
             ),
           ),
         ),
+        if (_.changeable)
+          Align(
+            alignment: Alignment.bottomRight,
+            child: IconButton(
+                icon: Icon(Icons.change_circle),
+                color: Colors.white,
+                onPressed: () => showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text('Change excercise'),
+                        content: StatefulBuilder(
+                            builder: (context, setState) =>
+                                changeTrainingDialog(context, setState)),
+                        actions: <Widget>[
+                          TextButton(
+                            onPressed: () => Navigator.pop(context, 'Cancel'),
+                            child: const Text('Cancel'),
+                          ),
+                        ],
+                      );
+                    })),
+          )
       ],
     );
   }
 }
 
+enum TrainingOptions { OHP, DL, SQ, BP }
+var mappingTable = {
+  "Overhead Press": TrainingOptions.OHP,
+  "Deadlift": TrainingOptions.DL,
+  "Bench Press": TrainingOptions.BP,
+  "Squat": TrainingOptions.SQ
+};
 
 
-class CardSectionTitle extends StatelessWidget{
+Widget changeTrainingDialog(BuildContext context, StateSetter setState) {
+  var profile = Provider.of<UserProfile>(context, listen: false);
+  TrainingOptions? _trainingOption = mappingTable[profile.currentExcercise];
+
+  return Column(mainAxisSize: MainAxisSize.min, children: 
+    mappingTable.keys.map((e) =>
+      RadioListTile<TrainingOptions>(
+        title: Text(e.toString()),
+        value: mappingTable[e]!,
+        groupValue: _trainingOption,
+        onChanged: (TrainingOptions? value) {
+          setState(() {
+            print(e);
+            Provider.of<UserProfile>(context, listen: false).storeUserSetting('Current_Excercise', e);
+            _trainingOption = value;
+            Navigator.pop(context, 'Saved');
+          });
+        },
+    )).toList()
+  );
+}
+
+class CardSectionTitle extends StatelessWidget {
   final String title;
   CardSectionTitle(this.title);
 

@@ -9,8 +9,7 @@ import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
-  _HomeScreenState createState() =>
-      _HomeScreenState();
+  _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
@@ -28,24 +27,28 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               Container(
                   margin: const EdgeInsets.only(bottom: 8),
-                  child: TappableCard(
-                      sectionTitle: 'Todays Training',
-                      cartContent: HomeCard('Overhead Press', '5 x 20kg',
-                          '5 x 30kg', '5 x 40kg', 'graphics/ohp.png'),
-                      route: '/excercise')),
+                  child: buildTrainingCard()),
               Container(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: TappableCard(
                       sectionTitle: 'Current Max Reps',
                       cartContent: HomeCard(
-                          'OHP', '45kg via 5 x 40kg', '40kg via 4 x 38kg', '38kg via 4x 20kg','graphics/stats.png'),
+                          'OHP',
+                          '45kg via 5 x 40kg',
+                          '40kg via 4 x 38kg',
+                          '38kg via 4x 20kg',
+                          'graphics/stats.png'),
                       route: '/stats')),
               Container(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: TappableCard(
                       sectionTitle: 'Cycle Information',
                       cartContent: HomeCard(
-                          'Boring But Big', 'Cycle Type: Leader', 'Cycle Number: Cycle 1', 'Current Week: Week 2', 'graphics/cycle.png'),
+                          'Boring But Big',
+                          'Cycle Type: Leader',
+                          'Cycle Number: Cycle 1',
+                          'Current Week: Week 2',
+                          'graphics/cycle.png'),
                       route: '/cycleOverview')),
             ],
           ),
@@ -53,6 +56,21 @@ class _HomeScreenState extends State<HomeScreen> {
         drawer: buildDrawer(context),
       );
   }
+}
+
+buildTrainingCard() {
+  return Consumer<UserProfile>(builder: (context, user, child) {
+    return TappableCard(
+        sectionTitle: 'Todays Training',
+        cartContent: HomeCard(
+          user.currentExcercise, 
+          '5 x 20kg', 
+          '5 x 30kg',
+          '5 x 40kg', 
+          'graphics/ohp.png',
+          changeable: true),
+        route: '/excercise');
+  });
 }
 
 /**

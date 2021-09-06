@@ -8,6 +8,7 @@ class UserProfile with ChangeNotifier {
   bool isLoaded = false;
   late int currentTrainingMaxPercentage;
   late String cycleTemplate;
+  late String currentExcercise;
   List<TrainingMax> liftList = [];
 
   UserProfile() {
@@ -38,6 +39,7 @@ class UserProfile with ChangeNotifier {
         await pref.getSharedPrefValueInt('Training_Max_Percentage');
     this.cycleTemplate =
       await pref.getSharedPrefValueString('Cycle_Template');
+    this.currentExcercise = await pref.getSharedPrefValueString('Current_Excercise');
     notifyListeners();
   }
 
