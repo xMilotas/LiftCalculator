@@ -10,9 +10,13 @@ class SettingsScreen extends StatefulWidget {
   _SettingsScreenState createState() => _SettingsScreenState();
 }
 
+enum CycleTemplates { BoringButBig, FirstSetLast }
+
 class _SettingsScreenState extends State<SettingsScreen> {
   @override
   Widget build(BuildContext context) {
+    var profile = Provider.of<UserProfile>(context);
+
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
@@ -32,9 +36,70 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 max: 95,
                 value: user.currentTrainingMaxPercentage.toDouble(),
                 onChanged: (value) =>
-                    storeSetting('Training_Max_Percentage', value),
+                    storeSetting(context, 'Training_Max_Percentage', value.toInt()),
               );
             },
+          ),
+          ListTile(
+            title: Text('Selected cycle template'),
+            subtitle: Consumer<UserProfile>(
+              builder: (context, user, child) {
+                if(user.cycleTemplate == 'FirstSetLast') return Text("First Set Last");
+                else return Text("Boring But Big");
+              },
+            ),
+            trailing: Icon(Icons.keyboard_arrow_right),
+            onTap: () => showDialog(
+              context: context,
+              builder: (context) {
+                CycleTemplates? _cycleTemplate = CycleTemplates.BoringButBig;
+                if (profile.cycleTemplate == 'FirstSetLast')
+                  _cycleTemplate = CycleTemplates.FirstSetLast;
+                return AlertDialog(
+                  title: const Text('Change template'),
+                  content: StatefulBuilder(
+                      builder: (BuildContext context, StateSetter setState) {
+                    return Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        RadioListTile<CycleTemplates>(
+                          title: Text('Boring But Big'),
+                          value: CycleTemplates.BoringButBig,
+                          groupValue: _cycleTemplate,
+                          onChanged: (CycleTemplates? value) {
+                            setState(() {
+                              _cycleTemplate = value;
+                              storeSetting(
+                                  context, 'Cycle_Template', 'BoringButBig');
+                              Navigator.pop(context, 'Saved');
+                            });
+                          },
+                        ),
+                        RadioListTile<CycleTemplates>(
+                          title: Text('First Set Last'),
+                          value: CycleTemplates.FirstSetLast,
+                          groupValue: _cycleTemplate,
+                          onChanged: (CycleTemplates? value) {
+                            setState(() {
+                              _cycleTemplate = value;
+                              storeSetting(
+                                  context, 'Cycle_Template', 'FirstSetLast');
+                              Navigator.pop(context, 'Saved');
+                            });
+                          },
+                        )
+                      ],
+                    );
+                  }),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('Cancel'),
+                    ),
+                  ],
+                );
+              },
+            ),
           )
         ],
       ),
@@ -42,7 +107,6 @@ class _SettingsScreenState extends State<SettingsScreen> {
   }
 }
 
-storeSetting(String type, double value) async {
-  Preferences pref = await Preferences.create();
-  await pref.setSharedPrefValue(type, value.round());
+storeSetting(context, String referenceVar, dynamic value) async {
+  Provider.of<UserProfile>(context, listen: false).storeUserSetting(referenceVar, value);
 }

@@ -52,9 +52,9 @@ class TrainingMax {
 
   saveData() async {
     Preferences pref = await Preferences.create();
-    await pref.setSharedPrefValue('${this.abrevation}_weight', this.weight);
-    await pref.setSharedPrefValue('${this.abrevation}_reps', this.reps);
-    await pref.setSharedPrefValue(
+    await pref.setSharedPrefValueInt('${this.abrevation}_weight', this.weight);
+    await pref.setSharedPrefValueInt('${this.abrevation}_reps', this.reps);
+    await pref.setSharedPrefValueInt(
         '${this.abrevation}_1RM', await calculate1RM());
     this.current1RM = this.new1RM;
   }
