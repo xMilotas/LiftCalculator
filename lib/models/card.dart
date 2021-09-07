@@ -5,14 +5,11 @@ import 'package:provider/provider.dart';
 
 class HomeCard {
   final String contentTitle;
-  final String contentRow1;
-  final String contentRow2;
-  final String contentRow3;
+  final Widget content;
   bool changeable;
   String imageName;
 
-  HomeCard(this.contentTitle, this.contentRow1, this.contentRow2,
-      this.contentRow3, this.imageName,
+  HomeCard(this.contentTitle, this.content, this.imageName,
       {this.changeable = false});
 }
 
@@ -109,14 +106,7 @@ class CardContent extends StatelessWidget {
             style: descriptionStyle!,
             child: Row(
               children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(_.contentRow1),
-                    Text(_.contentRow2),
-                    Text(_.contentRow3),
-                  ],
-                ),
+                _.content
               ],
             ),
           ),
@@ -149,29 +139,20 @@ class CardContent extends StatelessWidget {
   }
 }
 
-enum TrainingOptions { OHP, DL, SQ, BP }
-var mappingTable = {
-  "Overhead Press": TrainingOptions.OHP,
-  "Deadlift": TrainingOptions.DL,
-  "Bench Press": TrainingOptions.BP,
-  "Squat": TrainingOptions.SQ
-};
-
-
 Widget changeTrainingDialog(BuildContext context, StateSetter setState) {
   var profile = Provider.of<UserProfile>(context, listen: false);
-  TrainingOptions? _trainingOption = mappingTable[profile.currentExcercise];
-
+  String? _trainingOption = profile.currentExcercise.abrevation;
+  
   return Column(mainAxisSize: MainAxisSize.min, children: 
-    mappingTable.keys.map((e) =>
-      RadioListTile<TrainingOptions>(
-        title: Text(e.toString()),
-        value: mappingTable[e]!,
+    profile.liftList.map((e) =>
+      RadioListTile<String>(
+        title: Text(e.title),
+        value: e.abrevation,
         groupValue: _trainingOption,
-        onChanged: (TrainingOptions? value) {
+        onChanged: (String? value) {
           setState(() {
             print(e);
-            Provider.of<UserProfile>(context, listen: false).storeUserSetting('Current_Excercise', e);
+            Provider.of<UserProfile>(context, listen: false).storeUserSetting('Current_Excercise', e.id);
             _trainingOption = value;
             Navigator.pop(context, 'Saved');
           });

@@ -23,21 +23,21 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Lift Calculator',
-        themeMode: ThemeMode.dark,
-        darkTheme: ThemeData(
-          scaffoldBackgroundColor: Colors.grey.shade900,
-          primaryColor: Colors.black,
-          colorScheme: ColorScheme.dark(),
-          iconTheme: IconThemeData(color: Colors.purple.shade200, opacity: 0.8),
-        ),
-        initialRoute: '/',
-        routes: {
-          '/': (context) => HomeScreen(),
-          '/settings': (context) => SettingsScreen(),
-          '/trainingConfig': (context) => TrainingMaxConfigScreen(),
-          '/excercise': (context)  => ExcerciseScreen(),
-        },
+      title: 'Lift Calculator',
+      themeMode: ThemeMode.dark,
+      darkTheme: ThemeData(
+        scaffoldBackgroundColor: Colors.grey.shade900,
+        primaryColor: Colors.black,
+        colorScheme: ColorScheme.dark(),
+        iconTheme: IconThemeData(color: Colors.purple.shade200, opacity: 0.8),
+      ),
+      initialRoute: '/',
+      routes: {
+        '/': (context) => HomeScreen(),
+        '/settings': (context) => SettingsScreen(),
+        '/trainingConfig': (context) => TrainingMaxConfigScreen(),
+        '/excercise': (context) => ExcerciseScreen(),
+      },
     );
   }
 }
@@ -52,11 +52,9 @@ class Splash extends StatelessWidget {
   }
 }
 
-
-
 // What defines a training? i.e. how is it calculated
 
 // The excercise, cycle, week, Training Max -- using these we can calc everything?
 // (This defines the overall plan for the 4 lifts)
 // per lift we need an doneMarker to indicate if the week is complete or not (completedStatus)
-// in theory I want to be able to choose which lift I perform 
+// in theory I want to be able to choose which lift I perform

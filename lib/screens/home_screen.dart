@@ -5,6 +5,7 @@ import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/profile.dart';
 
 import 'package:liftcalculator/main.dart';
+import 'package:liftcalculator/util/programs.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -34,9 +35,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       sectionTitle: 'Current Max Reps',
                       cartContent: HomeCard(
                           'OHP',
-                          '45kg via 5 x 40kg',
-                          '40kg via 4 x 38kg',
-                          '38kg via 4x 20kg',
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('45kg via 5 x 40kg'),
+                              Text('40kg via 4 x 38kg'),
+                              Text('38kg via 4x 20kg'),
+                            ],),
                           'graphics/stats.png'),
                       route: '/stats')),
               Container(
@@ -44,10 +49,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: TappableCard(
                       sectionTitle: 'Cycle Information',
                       cartContent: HomeCard(
+                        //TODO: Make this a cosumer card instead of static text
                           'Boring But Big',
-                          'Cycle Type: Leader',
-                          'Cycle Number: Cycle 1',
-                          'Current Week: Week 2',
+                           Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                          Text('Cycle Type: Leader'),
+                          Text('Cycle Number: Cycle 1'),
+                          Text('Current Week: Week 2'),
+                            ],),
                           'graphics/cycle.png'),
                       route: '/cycleOverview')),
             ],
@@ -60,17 +70,31 @@ class _HomeScreenState extends State<HomeScreen> {
 
 buildTrainingCard() {
   return Consumer<UserProfile>(builder: (context, user, child) {
+    int excerciseTrainingMax = (user.currentExcercise.current1RM * user.currentTrainingMaxPercentage / 100).round();
+    List<LiftNumber> lifts = calculateTrainingNumbers(excerciseTrainingMax, user.program.week1.coreLifts);
+
     return TappableCard(
         sectionTitle: 'Todays Training',
         cartContent: HomeCard(
-          user.currentExcercise, 
-          '5 x 20kg', 
-          '5 x 30kg',
-          '5 x 40kg', 
+          user.currentExcercise.title,
+          Column(children: buildAndformatLiftNumbers(lifts)), 
           'graphics/ohp.png',
           changeable: true),
         route: '/excercise');
   });
+}
+
+
+
+/// Returns the calculated weights for a given List of Lift Numbers
+calculateTrainingNumbers(int trainingMax, List<LiftNumber> program ) => 
+program.map((e) => LiftNumber(e.weightPercentage, e.reps, weight: (e.weightPercentage/100 * trainingMax))).toList();
+
+/// Build training output
+/// TODO: Fix output to a proper format add reps
+buildAndformatLiftNumbers(List<LiftNumber> lifts){
+  return lifts.map((e) => Text(e.weight.toString())
+  ).toList();
 }
 
 /**
@@ -81,3 +105,6 @@ buildTrainingCard() {
  *      - Today's training as card - on press - move 
  *      - (Give option to change training)
  * */
+
+
+ // TODO: Write function that rounds to .5/1kg 

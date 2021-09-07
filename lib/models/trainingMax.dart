@@ -5,6 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:async';
 
 class TrainingMax {
+  final int id;
   final String title;
   final String abrevation;
   IconData? icon; //TODO: Add some nice icons here
@@ -15,14 +16,14 @@ class TrainingMax {
   int trainingMax;
   int new1RM;
 
-  TrainingMax._create(this.title, this.abrevation, {this.icon})
+  TrainingMax._create(this.id, this.title, this.abrevation, {this.icon})
       : isExpanded = false,
         new1RM = 0,
         trainingMax = 0;
 
-  static Future<TrainingMax> create(String title, String abrevation,
+  static Future<TrainingMax> create(int id, String title, String abrevation,
       {IconData? icon}) async {
-    var component = TrainingMax._create(title, abrevation, icon: icon);
+    var component = TrainingMax._create(id, title, abrevation, icon: icon);
     await component._loadData();
     return component;
   }
