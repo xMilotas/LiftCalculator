@@ -5,6 +5,7 @@ import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/profile.dart';
 
 import 'package:liftcalculator/main.dart';
+import 'package:liftcalculator/models/training.dart';
 import 'package:liftcalculator/util/programs.dart';
 import 'package:provider/provider.dart';
 
@@ -41,25 +42,13 @@ class _HomeScreenState extends State<HomeScreen> {
                               Text('45kg via 5 x 40kg'),
                               Text('40kg via 4 x 38kg'),
                               Text('38kg via 4x 20kg'),
-                            ],),
+                            ],
+                          ),
                           'graphics/stats.png'),
                       route: '/stats')),
               Container(
                   margin: const EdgeInsets.only(bottom: 8),
-                  child: TappableCard(
-                      sectionTitle: 'Cycle Information',
-                      cartContent: HomeCard(
-                        //TODO: Make this a cosumer card instead of static text
-                          'Boring But Big',
-                           Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                          Text('Cycle Type: Leader'),
-                          Text('Cycle Number: Cycle 1'),
-                          Text('Current Week: Week 2'),
-                            ],),
-                          'graphics/cycle.png'),
-                      route: '/cycleOverview')),
+                  child: buildCycleCard()),
             ],
           ),
         ),
@@ -68,33 +57,24 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-buildTrainingCard() {
+buildCycleCard() {
   return Consumer<UserProfile>(builder: (context, user, child) {
-    int excerciseTrainingMax = (user.currentExcercise.current1RM * user.currentTrainingMaxPercentage / 100).round();
-    List<LiftNumber> lifts = calculateTrainingNumbers(excerciseTrainingMax, user.program.week1.coreLifts);
-
+    LiftProgram prog = user.program;
     return TappableCard(
-        sectionTitle: 'Todays Training',
+        sectionTitle: "Cycle and Program Information",
         cartContent: HomeCard(
-          user.currentExcercise.title,
-          Column(children: buildAndformatLiftNumbers(lifts)), 
-          'graphics/ohp.png',
-          changeable: true),
-        route: '/excercise');
+            prog.name,
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('Cycle Type:   ' + prog.cycleType),
+                Text('Cycle Number: ' + user.cycleNumber.toString()),
+                Text('Current Week: ' + user.cycleWeek.toString()),
+              ],
+            ),
+            'graphics/cycle.png'),
+        route: '/cycleOverview');
   });
-}
-
-
-
-/// Returns the calculated weights for a given List of Lift Numbers
-calculateTrainingNumbers(int trainingMax, List<LiftNumber> program ) => 
-program.map((e) => LiftNumber(e.weightPercentage, e.reps, weight: (e.weightPercentage/100 * trainingMax))).toList();
-
-/// Build training output
-/// TODO: Fix output to a proper format add reps
-buildAndformatLiftNumbers(List<LiftNumber> lifts){
-  return lifts.map((e) => Text(e.weight.toString())
-  ).toList();
 }
 
 /**
@@ -105,6 +85,9 @@ buildAndformatLiftNumbers(List<LiftNumber> lifts){
  *      - Today's training as card - on press - move 
  *      - (Give option to change training)
  * */
+// What defines a training? i.e. how is it calculated
 
-
- // TODO: Write function that rounds to .5/1kg 
+// The excercise, cycle, week, Training Max -- using these we can calc everything?
+// (This defines the overall plan for the 4 lifts)
+// per lift we need an doneMarker to indicate if the week is complete or not (completedStatus)
+// in theory I want to be able to choose which lift I perform

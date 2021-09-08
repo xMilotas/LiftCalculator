@@ -9,6 +9,8 @@ class UserProfile with ChangeNotifier {
   bool isLoaded = false;
   late int currentTrainingMaxPercentage;
   late String cycleTemplate;
+  late int cycleWeek;
+  late int cycleNumber;
   late TrainingMax currentExcercise;
   List<TrainingMax> liftList = [];
   late LiftProgram program;
@@ -30,9 +32,9 @@ class UserProfile with ChangeNotifier {
     this.liftList.insert(3, sq);
 
     _loadSettings();
-
-    this.isLoaded = true;
     await Future.delayed(Duration(seconds: 1));
+    this.isLoaded = true;
+    
     notifyListeners();
   }
 
@@ -48,6 +50,11 @@ class UserProfile with ChangeNotifier {
     else this.program = boringButBig;
 
     this.currentExcercise = this.liftList[await pref.getSharedPrefValueInt('Current_Excercise')];
+    int week = await pref.getSharedPrefValueInt('Current_Week');
+    this.cycleWeek = ( week == 0) ? 1: week;
+
+    int cycle = await pref.getSharedPrefValueInt('Current_Cycle');
+    this.cycleNumber = ( cycle == 0) ? 1: cycle;
 
     notifyListeners();
   }
