@@ -22,7 +22,7 @@ class ExcerciseScreen extends StatefulWidget {
 }
 
 class _ExcerciseScreenState extends State<ExcerciseScreen> {
-    int reps = 5;
+  int reps = 5;
     
 
   void increase() {

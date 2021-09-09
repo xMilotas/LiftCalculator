@@ -20,8 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
     var profile = Provider.of<UserProfile>(context);
     if (profile.isLoaded == false) {
       return Splash();
-    } else
-      return Scaffold(
+    } else return Scaffold(
         appBar: buildAppBar(context),
         body: Scrollbar(
           child: ListView(
@@ -30,6 +29,9 @@ class _HomeScreenState extends State<HomeScreen> {
               Container(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: buildTrainingCard()),
+              Container(
+                  margin: const EdgeInsets.only(bottom: 8),
+                  child: buildCycleCard()),
               Container(
                   margin: const EdgeInsets.only(bottom: 8),
                   child: TappableCard(
@@ -46,9 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           'graphics/stats.png'),
                       route: '/stats')),
-              Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: buildCycleCard()),
             ],
           ),
         ),

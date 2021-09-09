@@ -49,7 +49,7 @@ buildTrainingCard() {
               ),
             ],
           ), 
-          'graphics/ohp.png',
+          'graphics/${user.currentExcercise.abrevation}.png',
           changeable: true),
         route: '/excercise');
   });
