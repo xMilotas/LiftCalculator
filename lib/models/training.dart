@@ -29,9 +29,10 @@ class Training {
 
 buildTrainingCard() {
   return Consumer<UserProfile>(builder: (context, user, child) {
+    LiftDay week = getCurrentWeek(user);
     int excerciseTrainingMax = (user.currentExcercise.current1RM * user.currentTrainingMaxPercentage / 100).round();
-    List<LiftNumber> lifts = calculateTrainingNumbers(excerciseTrainingMax, user.program.week1.coreLifts);
-    List<LiftNumber> cycleLift = calculateTrainingNumbers(excerciseTrainingMax, user.program.week1.cycleLift);
+    List<LiftNumber> lifts = calculateTrainingNumbers(excerciseTrainingMax, week.coreLifts);
+    List<LiftNumber> cycleLift = calculateTrainingNumbers(excerciseTrainingMax, week.cycleLift);
 
     return TappableCard(
         sectionTitle: 'Todays Training',
@@ -57,13 +58,21 @@ buildTrainingCard() {
 
 /// Returns the calculated weights for a given List of Lift Numbers
 calculateTrainingNumbers(int trainingMax, List<LiftNumber> program ) => 
-program.map((e) => LiftNumber(e.weightPercentage, e.reps, weight: (e.weightPercentage/100 * trainingMax), sets: e.sets)).toList();
+program.map((e) => LiftNumber(e.weightPercentage, e.reps, weight: (e.weightPercentage/100 * trainingMax), sets: e.sets, pr: e.pr)).toList();
 
 /// Build training output
 buildAndformatLiftNumbers(List<LiftNumber> lifts){
   return lifts.map((e) => Text(WeightReps(e.weight, e.reps).toString())
   ).toList();
 }
+
+LiftDay getCurrentWeek(UserProfile user){
+  int week = user.cycleWeek;
+  if(week == 1) return user.program.week1;
+  if(week == 2) return user.program.week2;
+  else return user.program.week3;
+}
+
 
 buildSetOutput(LiftNumber lift){
   int sets = lift.sets;

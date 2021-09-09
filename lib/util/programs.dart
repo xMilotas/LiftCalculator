@@ -1,7 +1,7 @@
 import 'package:liftcalculator/util/staticPrograms.dart';
 
 class LiftNumber {
-  final double weight;
+  double weight;
   final int weightPercentage;
   final int reps;
   final int sets;
@@ -12,7 +12,7 @@ class LiftNumber {
 
   @override
   String toString() {
-    return "%:${this.weightPercentage}, reps: ${this.reps}, weight: ${this.weight}, sets: ${this.sets}";
+    return "%:${this.weightPercentage}, reps: ${this.reps}, weight: ${this.weight}, sets: ${this.sets}, pr: ${this.pr}";
   }
 }
 
