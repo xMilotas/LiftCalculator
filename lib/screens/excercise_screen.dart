@@ -86,7 +86,17 @@ class _ExcerciseScreenState extends State<ExcerciseScreen> {
               Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(reps.toString(), style: theme.textTheme.headline1!.copyWith(fontSize: 160)),
+                  if(excerciseToDo.pr)
+                    RichText(
+                      text: TextSpan(
+                        text: reps.toString(), 
+                        style: theme.textTheme.headline1!.copyWith(fontSize: 160),
+                        children: [
+                          WidgetSpan(child: Transform.translate(offset: Offset(10.0, -40.0), child: Text("+", style: theme.textTheme.headline2,),))
+                        ]
+                      ),
+                    )
+                  else Text(reps.toString(), style: theme.textTheme.headline1!.copyWith(fontSize: 160)),
                   if(excerciseToDo.sets >1) Text(currentCycleExcercise.toString()+'/'+excerciseToDo.sets.toString(), style: theme.textTheme.headline4),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +147,6 @@ class _ExcerciseScreenState extends State<ExcerciseScreen> {
                             context: context,
                             builder: (context) => drawTrainingFinished(context)
                           );
-                          Navigator.pushNamed(context, '/');
                         }
                       },
                       child: Text("DONE"),
