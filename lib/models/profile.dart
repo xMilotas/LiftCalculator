@@ -7,10 +7,10 @@ import 'package:liftcalculator/util/programs.dart';
 /// or the env context (everything which we need to get async)
 class UserProfile with ChangeNotifier {
   bool isLoaded = false;
-  late int currentTrainingMaxPercentage;
-  late String cycleTemplate;
-  late int cycleWeek;
-  late int cycleNumber;
+  int currentTrainingMaxPercentage = 90;
+  String cycleTemplate = "FirstSetLast";
+  int cycleWeek = 0;
+  int cycleNumber = 1;
   late TrainingMax currentExcercise;
   List<TrainingMax> liftList = [];
   late LiftProgram program;
@@ -25,7 +25,7 @@ class UserProfile with ChangeNotifier {
     TrainingMax dl = await TrainingMax.create(1, "Deadlift", "DL");
     TrainingMax bp = await TrainingMax.create(2, "Bench Press", "BP");
     TrainingMax sq = await TrainingMax.create(3, "Squat", "SQ");
-    
+
     this.liftList.insert(0, ohp);
     this.liftList.insert(1, dl);
     this.liftList.insert(2, bp);
@@ -34,7 +34,7 @@ class UserProfile with ChangeNotifier {
     _loadSettings();
     await Future.delayed(Duration(seconds: 1));
     this.isLoaded = true;
-    
+
     notifyListeners();
   }
 
@@ -43,29 +43,30 @@ class UserProfile with ChangeNotifier {
     Preferences pref = await Preferences.create();
     this.currentTrainingMaxPercentage =
         await pref.getSharedPrefValueInt('Training_Max_Percentage');
-    this.cycleTemplate =
-      await pref.getSharedPrefValueString('Cycle_Template');
+    this.cycleTemplate = await pref.getSharedPrefValueString('Cycle_Template');
 
-    if(this.cycleTemplate == 'FirstSetLast') this.program = firstSetLast;
-    else this.program = boringButBig;
+    if (this.cycleTemplate == 'FirstSetLast')
+      this.program = firstSetLast;
+    else
+      this.program = boringButBig;
 
-    this.currentExcercise = this.liftList[await pref.getSharedPrefValueInt('Current_Excercise')];
+    this.currentExcercise =
+        this.liftList[await pref.getSharedPrefValueInt('Current_Excercise')];
+
     int week = await pref.getSharedPrefValueInt('Current_Week');
-    this.cycleWeek = ( week == 0) ? 1: week;
+    this.cycleWeek = (week == 0) ? 1 : week;
 
     int cycle = await pref.getSharedPrefValueInt('Current_Cycle');
-    this.cycleNumber = ( cycle == 0) ? 1: cycle;
+    this.cycleNumber = (cycle == 0) ? 1 : cycle;
 
     notifyListeners();
   }
 
-
   // Stores any user defined setting via shared prefs and informs listeners
   storeUserSetting(String referenceVar, dynamic value) async {
     Preferences pref = await Preferences.create();
-    if(value is String) pref.setSharedPrefValueString(referenceVar, value);
-    if(value is int) pref.setSharedPrefValueInt(referenceVar, value);
+    if (value is String) pref.setSharedPrefValueString(referenceVar, value);
+    if (value is int) pref.setSharedPrefValueInt(referenceVar, value);
     _loadSettings();
   }
-
 }

@@ -75,10 +75,6 @@ class CardContent extends StatelessWidget {
           child: Stack(
             children: [
               Positioned.fill(
-                // In order to have the ink splash appear above the image, you
-                // must use Ink.image. This allows the image to be painted as
-                // part of the Material and display ink effects above it. Using
-                // a standard Image will obscure the ink splash.
                 child: Ink.image(
                   image: AssetImage(_.imageName),
                   fit: BoxFit.cover,
@@ -105,9 +101,7 @@ class CardContent extends StatelessWidget {
             overflow: TextOverflow.ellipsis,
             style: descriptionStyle!,
             child: Row(
-              children: [
-                _.content
-              ],
+              children: [_.content],
             ),
           ),
         ),
@@ -142,23 +136,25 @@ class CardContent extends StatelessWidget {
 Widget changeTrainingDialog(BuildContext context, StateSetter setState) {
   var profile = Provider.of<UserProfile>(context, listen: false);
   String? _trainingOption = profile.currentExcercise.abrevation;
-  
-  return Column(mainAxisSize: MainAxisSize.min, children: 
-    profile.liftList.map((e) =>
-      RadioListTile<String>(
-        title: Text(e.title),
-        value: e.abrevation,
-        groupValue: _trainingOption,
-        onChanged: (String? value) {
-          setState(() {
-            print(e);
-            Provider.of<UserProfile>(context, listen: false).storeUserSetting('Current_Excercise', e.id);
-            _trainingOption = value;
-            Navigator.pop(context, 'Saved');
-          });
-        },
-    )).toList()
-  );
+
+  return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: profile.liftList
+          .map((e) => RadioListTile<String>(
+                title: Text(e.title),
+                value: e.abrevation,
+                groupValue: _trainingOption,
+                onChanged: (String? value) {
+                  setState(() {
+                    print(e);
+                    Provider.of<UserProfile>(context, listen: false)
+                        .storeUserSetting('Current_Excercise', e.id);
+                    _trainingOption = value;
+                    Navigator.pop(context, 'Saved');
+                  });
+                },
+              ))
+          .toList());
 }
 
 class CardSectionTitle extends StatelessWidget {

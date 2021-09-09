@@ -19,7 +19,7 @@ class Preferences {
     return value;
   }
 
-   // Writes a string value to store
+  // Writes a string value to store
   setSharedPrefValueString(String referenceVar, String value) async {
     await this.prefs.setString(referenceVar, value);
     print('Set new value for $referenceVar, $value');
