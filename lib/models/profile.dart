@@ -9,7 +9,7 @@ class UserProfile with ChangeNotifier {
   bool isLoaded = false;
   int currentTrainingMaxPercentage = 90;
   String cycleTemplate = "FirstSetLast";
-  int cycleWeek = 0;
+  int cycleWeek = 1;
   int cycleNumber = 1;
   late TrainingMax currentExcercise;
   List<TrainingMax> liftList = [];
@@ -34,7 +34,7 @@ class UserProfile with ChangeNotifier {
     _loadSettings();
     await Future.delayed(Duration(seconds: 1));
     this.isLoaded = true;
-
+    print(this.toString());
     notifyListeners();
   }
 
@@ -68,5 +68,10 @@ class UserProfile with ChangeNotifier {
     if (value is String) pref.setSharedPrefValueString(referenceVar, value);
     if (value is int) pref.setSharedPrefValueInt(referenceVar, value);
     _loadSettings();
+  }
+
+  @override
+  String toString() {
+    return "Loaded: ${this.isLoaded}, currentTrainingMaxPercentage: ${this.currentTrainingMaxPercentage}, cycleTemplate: ${this.cycleTemplate}, cycleWeek: ${this.cycleWeek}, currentExcercise: ${this.currentExcercise}";
   }
 }
