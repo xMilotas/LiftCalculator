@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:liftcalculator/screens/excercise_screen.dart';
+import 'package:liftcalculator/screens/exercise_screen.dart';
 import 'package:liftcalculator/screens/home_screen.dart';
 import 'package:liftcalculator/screens/settings_screen.dart';
 import 'package:provider/provider.dart';
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         '/': (context) => HomeScreen(),
         '/settings': (context) => SettingsScreen(),
         '/trainingConfig': (context) => TrainingMaxConfigScreen(),
-        '/excercise': (context) => ExcerciseScreen(),
+        '/exercise': (context) => ExerciseScreen(),
       },
     );
   }

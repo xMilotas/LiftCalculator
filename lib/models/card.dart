@@ -115,7 +115,7 @@ class CardContent extends StatelessWidget {
                     context: context,
                     builder: (context) {
                       return AlertDialog(
-                        title: const Text('Change excercise'),
+                        title: const Text('Change exercise'),
                         content: StatefulBuilder(
                             builder: (context, setState) =>
                                 changeTrainingDialog(context, setState)),
@@ -135,20 +135,20 @@ class CardContent extends StatelessWidget {
 
 Widget changeTrainingDialog(BuildContext context, StateSetter setState) {
   var profile = Provider.of<UserProfile>(context, listen: false);
-  String? _trainingOption = profile.currentExcercise.abrevation;
+  String? _trainingOption = profile.currentExercise.abbreviation;
 
   return Column(
       mainAxisSize: MainAxisSize.min,
       children: profile.liftList
           .map((e) => RadioListTile<String>(
                 title: Text(e.title),
-                value: e.abrevation,
+                value: e.abbreviation,
                 groupValue: _trainingOption,
                 onChanged: (String? value) {
                   setState(() {
                     print(e);
                     Provider.of<UserProfile>(context, listen: false)
-                        .storeUserSetting('Current_Excercise', e.id);
+                        .storeUserSetting('Current_Exercise', e.id);
                     _trainingOption = value;
                     Navigator.pop(context, 'Saved');
                   });

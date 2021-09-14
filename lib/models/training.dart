@@ -30,19 +30,19 @@ class Training {
 buildTrainingCard() {
   return Consumer<UserProfile>(builder: (context, user, child) {
     LiftDay week = getCurrentWeek(user);
-    int excerciseTrainingMax = (user.currentExcercise.current1RM * user.currentTrainingMaxPercentage / 100).round();
-    List<LiftNumber> lifts = calculateTrainingNumbers(excerciseTrainingMax, week.coreLifts);
-    List<LiftNumber> cycleLift = calculateTrainingNumbers(excerciseTrainingMax, week.cycleLift);
+    int exerciseTrainingMax = (user.currentExercise.current1RM * user.currentTrainingMaxPercentage / 100).round();
+    List<LiftNumber> lifts = calculateTrainingNumbers(exerciseTrainingMax, week.coreLifts);
+    List<LiftNumber> cycleLift = calculateTrainingNumbers(exerciseTrainingMax, week.cycleLift);
 
     return TappableCard(
         sectionTitle: 'Todays Training',
         cartContent: HomeCard(
-          user.currentExcercise.title,
+          user.currentExercise.title,
           Row(
             children: [
               Wrap(
                 children: [
-                  Column(children: buildAndformatLiftNumbers(lifts)),
+                  Column(children: buildAndFormatLiftNumbers(lifts)),
                   Column(children: [
                     Padding(padding: EdgeInsets.only(left: 32), child: Text(buildSetOutput(cycleLift[0]) +" "+ WeightReps(cycleLift[0].weight, cycleLift[0].reps).toString()))
                   ]),
@@ -50,9 +50,9 @@ buildTrainingCard() {
               ),
             ],
           ), 
-          'graphics/${user.currentExcercise.abrevation}.png',
+          'graphics/${user.currentExercise.abbreviation}.png',
           changeable: true),
-        route: '/excercise');
+        route: '/exercise');
   });
 }
 
@@ -61,7 +61,7 @@ calculateTrainingNumbers(int trainingMax, List<LiftNumber> program ) =>
 program.map((e) => LiftNumber(e.weightPercentage, e.reps, weight: (e.weightPercentage/100 * trainingMax), sets: e.sets, pr: e.pr)).toList();
 
 /// Build training output
-buildAndformatLiftNumbers(List<LiftNumber> lifts){
+buildAndFormatLiftNumbers(List<LiftNumber> lifts){
   return lifts.map((e) => Text(WeightReps(e.weight, e.reps).toString())
   ).toList();
 }

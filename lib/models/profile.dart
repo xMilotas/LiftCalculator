@@ -11,7 +11,7 @@ class UserProfile with ChangeNotifier {
   String cycleTemplate = "FirstSetLast";
   int cycleWeek = 1;
   int cycleNumber = 1;
-  late TrainingMax currentExcercise;
+  late TrainingMax currentExercise;
   List<TrainingMax> liftList = [];
   late LiftProgram program;
 
@@ -50,8 +50,8 @@ class UserProfile with ChangeNotifier {
     else
       this.program = boringButBig;
 
-    this.currentExcercise =
-        this.liftList[await pref.getSharedPrefValueInt('Current_Excercise')];
+    this.currentExercise =
+        this.liftList[await pref.getSharedPrefValueInt('Current_Exercise')];
 
     int week = await pref.getSharedPrefValueInt('Current_Week');
     this.cycleWeek = (week == 0) ? 1 : week;
@@ -72,6 +72,6 @@ class UserProfile with ChangeNotifier {
 
   @override
   String toString() {
-    return "Loaded: ${this.isLoaded}, currentTrainingMaxPercentage: ${this.currentTrainingMaxPercentage}, cycleTemplate: ${this.cycleTemplate}, cycleWeek: ${this.cycleWeek}, currentExcercise: ${this.currentExcercise}";
+    return "Loaded: ${this.isLoaded}, currentTrainingMaxPercentage: ${this.currentTrainingMaxPercentage}, cycleTemplate: ${this.cycleTemplate}, cycleWeek: ${this.cycleWeek}, currentExercise: ${this.currentExercise}";
   }
 }

@@ -2,7 +2,7 @@
 
 
 class AssistanceLift {
-  // This is dependend on the lift im performing
+  // This depends on the lift im performing
   final String name;
   final String reps;
 
