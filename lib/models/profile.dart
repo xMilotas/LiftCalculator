@@ -41,9 +41,10 @@ class UserProfile with ChangeNotifier {
   // Loads everything that the user can influence via the settings screen
   _loadSettings() async {
     Preferences pref = await Preferences.create();
-    this.currentTrainingMaxPercentage =
-        await pref.getSharedPrefValueInt('Training_Max_Percentage');
-    this.cycleTemplate = await pref.getSharedPrefValueString('Cycle_Template');
+    int tmMaxPercent = await pref.getSharedPrefValueInt('Training_Max_Percentage');
+    this.currentTrainingMaxPercentage = (tmMaxPercent == 0) ? 85 : tmMaxPercent;
+    String template = await pref.getSharedPrefValueString('Cycle_Template');
+    this.cycleTemplate = (template == "") ? "BoringButBig" : template;
 
     if (this.cycleTemplate == 'FirstSetLast')
       this.program = firstSetLast;
@@ -72,6 +73,6 @@ class UserProfile with ChangeNotifier {
 
   @override
   String toString() {
-    return "Loaded: ${this.isLoaded}, currentTrainingMaxPercentage: ${this.currentTrainingMaxPercentage}, cycleTemplate: ${this.cycleTemplate}, cycleWeek: ${this.cycleWeek}, currentExercise: ${this.currentExercise}";
+    return "[USER_PROFILE]: loaded: ${this.isLoaded}, currentTrainingMaxPercentage: ${this.currentTrainingMaxPercentage}, cycleTemplate: ${this.cycleTemplate}, cycleWeek: ${this.cycleWeek}, currentExercise: ${this.currentExercise}";
   }
 }
