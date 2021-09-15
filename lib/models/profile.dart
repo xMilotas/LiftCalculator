@@ -1,7 +1,10 @@
 import 'package:flutter/cupertino.dart';
+import 'package:liftcalculator/models/lift.dart';
 import 'package:liftcalculator/models/trainingMax.dart';
+import 'package:liftcalculator/util/db.dart';
 import 'package:liftcalculator/util/preferences.dart';
 import 'package:liftcalculator/util/programs.dart';
+import 'package:sqflite/sqflite.dart';
 
 /// Class that handles the users individual settings stored in either the DB
 /// or the env context (everything which we need to get async)
@@ -14,6 +17,8 @@ class UserProfile with ChangeNotifier {
   late TrainingMax currentExercise;
   List<TrainingMax> liftList = [];
   late LiftProgram program;
+  late Database db;
+  late List<Lift> best3Lifts;
 
   UserProfile() {
     _loadData();
@@ -32,6 +37,7 @@ class UserProfile with ChangeNotifier {
     this.liftList.insert(3, sq);
 
     _loadSettings();
+    _loadDBConnection();
     await Future.delayed(Duration(seconds: 1));
     this.isLoaded = true;
     print(this.toString());
@@ -41,7 +47,8 @@ class UserProfile with ChangeNotifier {
   // Loads everything that the user can influence via the settings screen
   _loadSettings() async {
     Preferences pref = await Preferences.create();
-    int tmMaxPercent = await pref.getSharedPrefValueInt('Training_Max_Percentage');
+    int tmMaxPercent =
+        await pref.getSharedPrefValueInt('Training_Max_Percentage');
     this.currentTrainingMaxPercentage = (tmMaxPercent == 0) ? 85 : tmMaxPercent;
     String template = await pref.getSharedPrefValueString('Cycle_Template');
     this.cycleTemplate = (template == "") ? "BoringButBig" : template;
@@ -63,12 +70,26 @@ class UserProfile with ChangeNotifier {
     notifyListeners();
   }
 
+  _loadDBConnection() async {
+    DatabaseClient client = await DatabaseClient.create();
+    this.db = client.db;
+    _getStats();
+  }
+
+  /// Grabs the top 3 stats for the current lift
+  _getStats() async {
+    LiftHelper liftHelper = LiftHelper(this.db);
+    this.best3Lifts = await liftHelper.getHighest1RMs(this.currentExercise.id);
+    print("[USER_PROFILE]:  *** Best LIFTS **** \n ${this.best3Lifts}");
+  }
+
   // Stores any user defined setting via shared prefs and informs listeners
   storeUserSetting(String referenceVar, dynamic value) async {
     Preferences pref = await Preferences.create();
     if (value is String) pref.setSharedPrefValueString(referenceVar, value);
     if (value is int) pref.setSharedPrefValueInt(referenceVar, value);
     _loadSettings();
+    if (referenceVar == "Current_Exercise") _getStats();
   }
 
   @override

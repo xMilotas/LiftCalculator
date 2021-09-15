@@ -20,7 +20,8 @@ class _HomeScreenState extends State<HomeScreen> {
     var profile = Provider.of<UserProfile>(context);
     if (profile.isLoaded == false) {
       return Splash();
-    } else return Scaffold(
+    } else
+      return Scaffold(
         appBar: buildAppBar(context),
         body: Scrollbar(
           child: ListView(
@@ -34,20 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: buildCycleCard()),
               Container(
                   margin: const EdgeInsets.only(bottom: 8),
-                  child: TappableCard(
-                      sectionTitle: 'Current Max Reps',
-                      cartContent: HomeCard(
-                          'OHP',
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('45kg via 5 x 40kg'),
-                              Text('40kg via 4 x 38kg'),
-                              Text('38kg via 4x 20kg'),
-                            ],
-                          ),
-                          'graphics/stats.png'),
-                      route: '/stats')),
+                  child: buildStatsCard(profile)),
             ],
           ),
         ),
@@ -73,6 +61,23 @@ buildCycleCard() {
             ),
             'graphics/cycle.png'),
         route: '/cycleOverview');
+  });
+}
+
+buildStatsCard(UserProfile user) {
+  return Consumer<UserProfile>(builder: (context, user, child) {
+    return TappableCard(
+        sectionTitle: 'Stats',
+        cartContent: HomeCard(
+            'Your current calculated max reps',
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(user.best3Lifts[0].toString()),
+              ],
+            ),
+            'graphics/stats.png'),
+        route: '/stats');
   });
 }
 

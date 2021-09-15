@@ -14,7 +14,7 @@ buildDrawer(context) => Drawer(
             leading: Icon(Icons.edit),
             title: const Text('Configure 1RM/TM'),
             onTap: () {
-              Navigator.pushReplacementNamed(context, '/trainingConfig');
+              Navigator.pushNamed(context, '/trainingConfig');
             },
           )
         ],
