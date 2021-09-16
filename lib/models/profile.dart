@@ -18,7 +18,6 @@ class UserProfile with ChangeNotifier {
   List<TrainingMax> liftList = [];
   late LiftProgram program;
   late Database db;
-  late List<Lift> best3Lifts;
 
   UserProfile() {
     _loadData();
@@ -66,21 +65,11 @@ class UserProfile with ChangeNotifier {
 
     int cycle = await pref.getSharedPrefValueInt('Current_Cycle');
     this.cycleNumber = (cycle == 0) ? 1 : cycle;
-
-    notifyListeners();
   }
 
   _loadDBConnection() async {
     DatabaseClient client = await DatabaseClient.create();
     this.db = client.db;
-    _getStats();
-  }
-
-  /// Grabs the top 3 stats for the current lift
-  _getStats() async {
-    LiftHelper liftHelper = LiftHelper(this.db);
-    this.best3Lifts = await liftHelper.getHighest1RMs(this.currentExercise.id);
-    print("[USER_PROFILE]:  *** Best LIFTS **** \n ${this.best3Lifts}");
   }
 
   // Stores any user defined setting via shared prefs and informs listeners
@@ -88,8 +77,13 @@ class UserProfile with ChangeNotifier {
     Preferences pref = await Preferences.create();
     if (value is String) pref.setSharedPrefValueString(referenceVar, value);
     if (value is int) pref.setSharedPrefValueInt(referenceVar, value);
+    refresh();
+  }
+
+  /// Loads the user profile again and notifies the listeners
+  refresh() {
     _loadSettings();
-    if (referenceVar == "Current_Exercise") _getStats();
+    notifyListeners();
   }
 
   @override

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/card.dart';
+import 'package:liftcalculator/models/databaseLoadIndicator.dart';
 import 'package:liftcalculator/models/drawer.dart';
+import 'package:liftcalculator/models/lift.dart';
 import 'package:liftcalculator/models/profile.dart';
 
 import 'package:liftcalculator/main.dart';
@@ -66,32 +68,38 @@ buildCycleCard() {
 
 buildStatsCard(UserProfile user) {
   return Consumer<UserProfile>(builder: (context, user, child) {
-    return TappableCard(
-        sectionTitle: 'Stats',
-        cartContent: HomeCard(
-            'Your current calculated max reps',
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(user.best3Lifts[0].toString()),
-              ],
-            ),
-            'graphics/stats.png'),
-        route: '/stats');
+    LiftHelper helper = LiftHelper(user.db);
+    return FutureBuilder(
+        future: helper.getHighest1RMs(user.currentExercise.id),
+        builder: (BuildContext context, AsyncSnapshot<List<Lift>> snapshot) {
+          List<Widget> output;
+          if (snapshot.hasData) {
+            List<Lift> data = snapshot.data!;
+            if (data.length == 0)
+              output = [Text('You have not performed any lifts yet')];
+            else {
+              output = data
+                  .map((e) => Row(
+                        children: [
+                          Text('${e.calculated1RM} via '),
+                          Text('${e.weightRep}')
+                        ],
+                      ))
+                  .toList();
+            }
+          } else output = dataFetchingIndicator();
+          return TappableCard(
+              sectionTitle: 'Stats',
+              cartContent: HomeCard(
+                  'Current Max Reps',
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: output,
+                  ),
+                  'graphics/stats.png'),
+              route: '/stats');
+        });
   });
 }
 
-/**
- * TODO:
- *      - Show current cycle number
- *      - Show current cycle type
- *      - Have a top row that shows current TM (can be straight forward) 
- *      - Today's training as card - on press - move 
- *      - (Give option to change training)
- * */
-// What defines a training? i.e. how is it calculated
 
-// The exercise, cycle, week, Training Max -- using these we can calc everything?
-// (This defines the overall plan for the 4 lifts)
-// per lift we need an doneMarker to indicate if the week is complete or not (completedStatus)
-// in theory I want to be able to choose which lift I perform

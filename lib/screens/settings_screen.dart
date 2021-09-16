@@ -1,7 +1,12 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
+import 'package:liftcalculator/models/lift.dart';
 
 import 'package:liftcalculator/models/profile.dart';
+import 'package:liftcalculator/screens/exercise_screen.dart';
+import 'package:liftcalculator/util/weight_reps.dart';
 import 'package:provider/provider.dart';
 
 class SettingsScreen extends StatefulWidget {
@@ -51,6 +56,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                 storeSetting(context, 'Current_Week', value.toInt()),
           ),
           buildCycleTemplateSetting(context, profile),
+          generateSampleData(context, profile),
         ],
       ),
     );
@@ -120,6 +126,29 @@ class _SettingsScreenState extends State<SettingsScreen> {
       ),
     );
   }
+}
+
+ListTile generateSampleData(BuildContext context, UserProfile profile) {
+  return ListTile(
+      title: Text('Generate sample data'),
+      trailing: Icon(Icons.keyboard_arrow_right),
+      onTap: () {
+        Random random = new Random();
+        // Setup sample values for TM
+        profile.liftList.forEach((trainingMax) {
+          trainingMax.storeValue('reps', random.nextInt(9)+1);
+          trainingMax.storeValue('weight', random.nextInt(80) + 30);
+          trainingMax.saveData();
+        });
+        for (var i = 0; i < 4; i++) {
+          for (var j = 1; j < 10; j++) {
+            // Generate sample lifts
+            Lift _tempLift = Lift(
+                i, DateTime(2021, 1, j), WeightReps(random.nextInt(80) + 30, random.nextInt(10)));
+            writeToDB(profile, _tempLift);
+          }
+        }
+      });
 }
 
 storeSetting(context, String referenceVar, dynamic value) async {

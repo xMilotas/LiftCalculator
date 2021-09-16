@@ -19,13 +19,9 @@ The features are mostly tied to my own usage / gym habits. Thus at the moment I 
 
 
 TODO:
-
-
--   Show + icon on PR sets (i.e. sets that we want to perform more reps than whats written)
+- [ ] Fix navigation
 -   Add assistance class + templates - should be tied to current exercise
 -   Add assistance to exercise
--   Store lifts in DB
--   (General DB functions - connect to it, create tables if needed)
 -   Show Trainings Max somewhere?
 
 - Handle cycles/finished exercises

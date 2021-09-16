@@ -34,7 +34,7 @@ class TrainingMax {
     return this.new1RM;
   }
 
-  // Store the current weight/reps in shared pref as key: liftName_weight (OHP_weight)
+  // Store the current weight/reps in object instance
   storeValue(String type, int value) async {
     // Store in class var
     if (type == 'weight') this.weight = value;
@@ -50,6 +50,7 @@ class TrainingMax {
         await pref.getSharedPrefValueInt('${this.abbreviation}_1RM');
   }
 
+  /// Save the lift info as a shared pref value
   saveData() async {
     Preferences pref = await Preferences.create();
     await pref.setSharedPrefValueInt('${this.abbreviation}_weight', this.weight);

@@ -1,38 +1,39 @@
 import 'dart:async';
+import 'package:liftcalculator/util/weight_reps.dart';
 import 'package:sqflite/sqflite.dart';
 
 // Base Lift class
 
 class Lift {
-  // Name of the lift (OHP: 0, DL: 1, Squat: 2, Bench: 3) - Can be stored as const somewhere
-  int id, date, reps, calculated1RM;
-  double weight;
+  int id;
+  DateTime date;
+  int calculated1RM;
+  WeightReps weightRep;
 
-  Lift(this.id, this.date, this.weight, this.reps)
-      : calculated1RM = ((weight + reps * 0.0333) + reps).round();
+  Lift(this.id, this.date, this.weightRep): 
+    calculated1RM = ((weightRep.weight + weightRep.reps * 0.0333) + weightRep.reps).round();
 
-  Lift.fromMap(Map<dynamic, dynamic> map)
-      : id = map['id'],
-        date = map['date'],
-        weight = map['weight'],
-        reps = map['reps'],
-        calculated1RM = map['calculated1RM'] {
-    print('Lift.fromMap(): ($id, $weight, $calculated1RM)');
-  }
+  Lift.fromMap(Map<dynamic, dynamic> map): 
+    id = map['id'],
+    date = DateTime.fromMillisecondsSinceEpoch(map['date']),
+    weightRep = WeightReps(map['weight'], map['reps']),
+    calculated1RM = map['calculated1RM'];
 
+  /// Transform a Lift into the DB structure:
+  /// Transposes weight rep into separate attributes and transforms date into int
   Map<String, dynamic> toMap() {
     return {
       'id': id,
-      'date': date,
-      'weight': weight,
-      'reps': reps,
+      'date': date.millisecondsSinceEpoch,
+      'weight': weightRep.weight,
+      'reps': weightRep.reps,
       'calculated1RM': calculated1RM,
     };
   }
 
   @override
   String toString() {
-    return 'Lift{ id: $id, date: $date, \n weight: $weight,reps: $reps ,calculated1RM: $calculated1RM }';
+    return 'Lift{ id: $id, date: $date, \n calculated1RM: $calculated1RM \n $weightRep }';
   }
 }
 
@@ -44,7 +45,20 @@ class LiftHelper {
   /// Finds the top 3 lifts with the highest 1RM for the corresponding lift type.
   Future<List<Lift>> getHighest1RMs(int id) async {
     List<Map> lifts = await db.query('Lift',
-        where: 'id = ?', whereArgs: [id], orderBy: 'calculated1RM', limit: 3);
+        where: 'id = ?',
+        whereArgs: [id],
+        orderBy: 'calculated1RM DESC',
+        limit: 3);
     return List.generate(lifts.length, (i) => Lift.fromMap(lifts[i]));
   }
+
+  /// Gets all performed lifts for this lift type
+  Future<List<Lift>> getAllLifts(int id) async {
+    List<Map> lifts = await db.query('Lift',
+        where: 'id = ?',
+        whereArgs: [id]
+        );
+    return List.generate(lifts.length, (i) => Lift.fromMap(lifts[i]));
+  }
+
 }

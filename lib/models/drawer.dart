@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 buildDrawer(context) => Drawer(
       child: ListView(
+        controller: ScrollController(),
         children: [
           ListTile(
             leading: Icon(Icons.home),
@@ -15,6 +16,13 @@ buildDrawer(context) => Drawer(
             title: const Text('Configure 1RM/TM'),
             onTap: () {
               Navigator.pushNamed(context, '/trainingConfig');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: const Text('DEBUG: DB DUMP'),
+            onTap: () {
+              Navigator.pushNamed(context, '/DbDumpScreen');
             },
           )
         ],

@@ -6,7 +6,7 @@ import 'package:liftcalculator/models/profile.dart';
 
 import 'package:liftcalculator/models/training.dart';
 import 'package:liftcalculator/util/programs.dart';
-import 'package:liftcalculator/util/weight.dart';
+import 'package:liftcalculator/util/weight_reps.dart';
 import 'package:provider/provider.dart';
 import 'package:sqflite/sql.dart';
 
@@ -154,9 +154,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     style: OutlinedButton.styleFrom(
                         textStyle: TextStyle(fontSize: 20)),
                     onPressed: () {
-                      DateTime now = DateTime.now();
-                      Lift _tempLift = Lift(profile.currentExercise.id,
-                          now.microsecondsSinceEpoch, weightReps.weight, reps);
+                      Lift _tempLift = Lift(
+                          profile.currentExercise.id,
+                          DateTime.now(), 
+                          WeightReps(weightReps.weight, reps)
+                          );
                       writeToDB(profile, _tempLift);
                       // Increase counter of exercise --
                       updateExercise(exerciseToDo.sets);
@@ -192,7 +194,8 @@ drawTrainingFinished(context) => AlertDialog(
       actions: [
         TextButton(
           onPressed: () {
-            Navigator.pushNamed(context, '/');
+            Provider.of<UserProfile>(context, listen: false).refresh();
+            Navigator.popUntil(context, ModalRoute.withName('/'));
           },
           child: Text('AWESOME'),
         ),

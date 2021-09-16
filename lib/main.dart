@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:liftcalculator/screens/db_dump_screen.dart';
 import 'package:liftcalculator/screens/exercise_screen.dart';
 import 'package:liftcalculator/screens/home_screen.dart';
 import 'package:liftcalculator/screens/settings_screen.dart';
@@ -37,6 +38,7 @@ class MyApp extends StatelessWidget {
         '/settings': (context) => SettingsScreen(),
         '/trainingConfig': (context) => TrainingMaxConfigScreen(),
         '/exercise': (context) => ExerciseScreen(),
+        '/DbDumpScreen': (context) => DbDumpScreen(),
       },
     );
   }

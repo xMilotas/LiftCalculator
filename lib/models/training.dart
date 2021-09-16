@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/card.dart';
 import 'package:liftcalculator/models/profile.dart';
 import 'package:liftcalculator/util/programs.dart';
-import 'package:liftcalculator/util/weight.dart';
+import 'package:liftcalculator/util/weight_reps.dart';
 import 'package:provider/provider.dart';
 
 class Training {

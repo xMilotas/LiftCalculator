@@ -123,8 +123,8 @@ class _TrainingMaxConfigScreenState extends State<TrainingMaxConfigScreen> {
 
   onPressed(context) {
     var profile = Provider.of<UserProfile>(context, listen: false);
-    profile.liftList.forEach((tile) {
-      tile.saveData();
+    profile.liftList.forEach((tm) {
+      tm.saveData();
     });
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
