@@ -10,14 +10,16 @@ class Lift {
   int calculated1RM;
   WeightReps weightRep;
 
-  Lift(this.id, this.date, this.weightRep): 
-    calculated1RM = ((weightRep.weight + weightRep.reps * 0.0333) + weightRep.reps).round();
+  Lift(this.id, this.date, this.weightRep)
+      : calculated1RM =
+            ((weightRep.weight + weightRep.reps * 0.0333) + weightRep.reps)
+                .round();
 
-  Lift.fromMap(Map<dynamic, dynamic> map): 
-    id = map['id'],
-    date = DateTime.fromMillisecondsSinceEpoch(map['date']),
-    weightRep = WeightReps(map['weight'], map['reps']),
-    calculated1RM = map['calculated1RM'];
+  Lift.fromMap(Map<dynamic, dynamic> map)
+      : id = map['id'],
+        date = DateTime.fromMillisecondsSinceEpoch(map['date']),
+        weightRep = WeightReps(map['weight'], map['reps']),
+        calculated1RM = map['calculated1RM'];
 
   /// Transform a Lift into the DB structure:
   /// Transposes weight rep into separate attributes and transforms date into int
@@ -54,11 +56,14 @@ class LiftHelper {
 
   /// Gets all performed lifts for this lift type
   Future<List<Lift>> getAllLifts(int id) async {
-    List<Map> lifts = await db.query('Lift',
-        where: 'id = ?',
-        whereArgs: [id]
-        );
+    List<Map> lifts = await db.query('Lift', where: 'id = ?', whereArgs: [id]);
     return List.generate(lifts.length, (i) => Lift.fromMap(lifts[i]));
   }
 
+  /// Gets only the biggest lift per day for a lift type
+  getHighestLiftsPerDay(int id) async {
+    List<Map> lifts = await db.rawQuery(
+        'SELECT a.calculated1RM, a.date, a.id, a.weight, a.reps FROM lift a INNER JOIN(SELECT MAX(calculated1RM) as calculated1RM, date, id FROM lift WHERE ID = $id GROUP BY id, date) b ON a.id = b.id and a.calculated1RM = b.calculated1RM');
+    return List.generate(lifts.length, (i) => Lift.fromMap(lifts[i]));
+  }
 }

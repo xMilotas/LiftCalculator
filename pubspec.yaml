@@ -27,6 +27,10 @@ dependencies:
   path:
   shared_preferences:
   flutter_spinbox:
+  charts_flutter:
+    git:
+      url: git://github.com/google/charts.git
+      path: charts_flutter
   
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

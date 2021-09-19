@@ -39,7 +39,7 @@ class _DbDumpScreenState extends State<DbDumpScreen> {
 
 Future<List<Lift>> getDBDump(UserProfile user) async {
   LiftHelper helper = LiftHelper(user.db);
-  List<Lift> allLifts = await helper.getAllLifts(user.currentExercise.id);
+  List<Lift> allLifts = await helper.getHighestLiftsPerDay(user.currentExercise.id);
   return allLifts;
 }
 

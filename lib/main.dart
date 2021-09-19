@@ -4,6 +4,7 @@ import 'package:liftcalculator/screens/db_dump_screen.dart';
 import 'package:liftcalculator/screens/exercise_screen.dart';
 import 'package:liftcalculator/screens/home_screen.dart';
 import 'package:liftcalculator/screens/settings_screen.dart';
+import 'package:liftcalculator/screens/stats_screen.dart';
 import 'package:liftcalculator/screens/training_max_display_screen.dart';
 import 'package:provider/provider.dart';
 
@@ -41,6 +42,7 @@ class MyApp extends StatelessWidget {
         '/trainingMax': (context) => TrainingMaxScreen(),
         '/exercise': (context) => ExerciseScreen(),
         '/DbDumpScreen': (context) => DbDumpScreen(),
+        '/stats': (context) => StatsScreen(),
       },
     );
   }

@@ -154,9 +154,10 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       // Prevent accidental presses by checking if current exercise is done already
                       if (!profile.cycleWeek
                           .getLiftStatus(profile.currentExercise.id)) {
+                            DateTime today = DateTime.now();
                         Lift _tempLift = Lift(
                             profile.currentExercise.id,
-                            DateTime.now(),
+                            DateTime(today.year, today.month, today.day), // only store the current day, not time
                             WeightReps(weightReps.weight, reps));
                         writeToDB(profile, _tempLift);
                         // Increase counter of exercise --
