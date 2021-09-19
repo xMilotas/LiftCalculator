@@ -71,14 +71,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     final theme = Theme.of(context);
     var profile = Provider.of<UserProfile>(context, listen: false);
     LiftDay week = getCurrentWeek(profile);
-
-    int exerciseTrainingMax = (profile.currentExercise.current1RM *
-            profile.currentTrainingMaxPercentage /
-            100)
-        .round();
     LiftNumber exerciseToDo = getCurrentExercise(week);
     WeightReps weightReps = WeightReps(
-        exerciseToDo.weightPercentage / 100 * exerciseTrainingMax,
+        profile.currentExercise.trainingMax *
+            exerciseToDo.weightPercentage /
+            100,
         exerciseToDo.reps);
     if (reps == -1) reps = weightReps.reps;
 
@@ -154,25 +151,27 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                     style: OutlinedButton.styleFrom(
                         textStyle: TextStyle(fontSize: 20)),
                     onPressed: () {
-                      Lift _tempLift = Lift(
-                          profile.currentExercise.id,
-                          DateTime.now(), 
-                          WeightReps(weightReps.weight, reps)
-                          );
-                      writeToDB(profile, _tempLift);
-                      // Increase counter of exercise --
-                      updateExercise(exerciseToDo.sets);
-                      // If we have a next exercise then redraw the screen with the next one, if not move to home screen - or show notification
-                      if (cycleDone && coreDone) {
-                        // TODO: Mark exercise for this week as done, set current to the next one
-                        // If all for this week = done -- next week
-                        // If week 3 - cycle handling
-
-                        // Draw overlay
-                        showDialog(
-                            context: context,
-                            builder: (context) =>
-                                drawTrainingFinished(context));
+                      // Prevent accidental presses by checking if current exercise is done already
+                      if (!profile.cycleWeek
+                          .getLiftStatus(profile.currentExercise.id)) {
+                        Lift _tempLift = Lift(
+                            profile.currentExercise.id,
+                            DateTime.now(),
+                            WeightReps(weightReps.weight, reps));
+                        writeToDB(profile, _tempLift);
+                        // Increase counter of exercise --
+                        updateExercise(exerciseToDo.sets);
+                        // If we have a next exercise then redraw the screen with the next one, if not move to home screen
+                        if (cycleDone && coreDone) {
+                          profile.cycleWeek.markLiftAsDone(
+                              profile.currentExercise.id, profile);
+                          // Draw overlay
+                          showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) =>
+                                  drawTrainingFinished(context));
+                        }
                       }
                     },
                     child: Text("DONE"),
@@ -195,7 +194,7 @@ drawTrainingFinished(context) => AlertDialog(
         TextButton(
           onPressed: () {
             Provider.of<UserProfile>(context, listen: false).refresh();
-            Navigator.popUntil(context, ModalRoute.withName('/'));
+            Navigator.pushNamed(context, '/');
           },
           child: Text('AWESOME'),
         ),

@@ -136,25 +136,31 @@ class CardContent extends StatelessWidget {
 Widget changeTrainingDialog(BuildContext context, StateSetter setState) {
   var profile = Provider.of<UserProfile>(context, listen: false);
   String? _trainingOption = profile.currentExercise.abbreviation;
+  List<Widget> output = [];
+  profile.liftList.forEach((e) {
+    bool isCompleted = profile.cycleWeek.getLiftStatus(e.id);
+    RadioListTile temp = RadioListTile<String>(
+      title: !isCompleted
+          ? Text(e.title)
+          : Text(e.title,
+              style: TextStyle(decoration: TextDecoration.lineThrough, decorationThickness: 2.85, color: Colors.grey)),
+      value: e.abbreviation,
+      groupValue: _trainingOption,
+      onChanged: (String? value) {
+        if (!isCompleted){
+          setState(() {
+          Provider.of<UserProfile>(context, listen: false)
+              .storeUserSetting('Current_Exercise', e.id);
+          _trainingOption = value;
+          Navigator.pop(context, 'Saved');
+        });
+        }
+      },
+    );
+    output.add(temp);
+  });
 
-  return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: profile.liftList
-          .map((e) => RadioListTile<String>(
-                title: Text(e.title),
-                value: e.abbreviation,
-                groupValue: _trainingOption,
-                onChanged: (String? value) {
-                  setState(() {
-                    print(e);
-                    Provider.of<UserProfile>(context, listen: false)
-                        .storeUserSetting('Current_Exercise', e.id);
-                    _trainingOption = value;
-                    Navigator.pop(context, 'Saved');
-                  });
-                },
-              ))
-          .toList());
+  return Column(mainAxisSize: MainAxisSize.min, children: output);
 }
 
 class CardSectionTitle extends StatelessWidget {

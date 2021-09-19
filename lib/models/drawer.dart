@@ -19,12 +19,22 @@ buildDrawer(context) => Drawer(
             },
           ),
           ListTile(
-            leading: Icon(Icons.edit),
+            leading: Icon(Icons.android_sharp),
             title: const Text('DEBUG: DB DUMP'),
             onTap: () {
               Navigator.pushNamed(context, '/DbDumpScreen');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: const Text('Configure TM'),
+            onTap: () {
+              Navigator.pushNamed(context, '/trainingMax');
             },
           )
         ],
       ),
     );
+
+
+    

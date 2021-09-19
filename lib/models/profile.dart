@@ -1,5 +1,5 @@
 import 'package:flutter/cupertino.dart';
-import 'package:liftcalculator/models/lift.dart';
+import 'package:liftcalculator/models/cycleWeek.dart';
 import 'package:liftcalculator/models/trainingMax.dart';
 import 'package:liftcalculator/util/db.dart';
 import 'package:liftcalculator/util/preferences.dart';
@@ -12,7 +12,7 @@ class UserProfile with ChangeNotifier {
   bool isLoaded = false;
   int currentTrainingMaxPercentage = 90;
   String cycleTemplate = "FirstSetLast";
-  int cycleWeek = 1;
+  CycleWeek cycleWeek = CycleWeek(1);
   int cycleNumber = 1;
   late TrainingMax currentExercise;
   List<TrainingMax> liftList = [];
@@ -34,6 +34,12 @@ class UserProfile with ChangeNotifier {
     this.liftList.insert(1, dl);
     this.liftList.insert(2, bp);
     this.liftList.insert(3, sq);
+    // Calculate training maxes & save them if not configured
+    this.liftList.forEach(
+        (lift) => {
+        lift.calculateTM(0),
+        lift.saveData()
+    });
 
     _loadSettings();
     _loadDBConnection();
@@ -48,7 +54,8 @@ class UserProfile with ChangeNotifier {
     Preferences pref = await Preferences.create();
     int tmMaxPercent =
         await pref.getSharedPrefValueInt('Training_Max_Percentage');
-    this.currentTrainingMaxPercentage = (tmMaxPercent == 0) ? 85 : tmMaxPercent;
+    this.currentTrainingMaxPercentage = (tmMaxPercent == 0) ? 90 : tmMaxPercent;
+
     String template = await pref.getSharedPrefValueString('Cycle_Template');
     this.cycleTemplate = (template == "") ? "BoringButBig" : template;
 
@@ -60,8 +67,8 @@ class UserProfile with ChangeNotifier {
     this.currentExercise =
         this.liftList[await pref.getSharedPrefValueInt('Current_Exercise')];
 
-    int week = await pref.getSharedPrefValueInt('Current_Week');
-    this.cycleWeek = (week == 0) ? 1 : week;
+    String week = await pref.getSharedPrefValueString('Current_Week');
+    this.cycleWeek = (week == "") ? CycleWeek(1) : CycleWeek.fromString(week);
 
     int cycle = await pref.getSharedPrefValueInt('Current_Cycle');
     this.cycleNumber = (cycle == 0) ? 1 : cycle;
@@ -77,6 +84,13 @@ class UserProfile with ChangeNotifier {
     Preferences pref = await Preferences.create();
     if (value is String) pref.setSharedPrefValueString(referenceVar, value);
     if (value is int) pref.setSharedPrefValueInt(referenceVar, value);
+    
+    // Handle TM changes
+    if(referenceVar == 'Training_Max_Percentage') this.liftList.forEach(
+              (lift) => {
+              lift.calculateTM(value),
+              lift.saveData()
+          });
     refresh();
   }
 

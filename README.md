@@ -22,14 +22,6 @@ TODO:
 - [ ] Fix navigation
 -   Add assistance class + templates - should be tied to current exercise
 -   Add assistance to exercise
--   Show Trainings Max somewhere?
-
-- Handle cycles/finished exercises
-// Mark exercise for this week as done, set current to the next one
-// If all for this week = done -- next week
-// If week 3 - cycle handling
-- exercise that is done should not be selectable in home screen / grayed out? 
-
 - Stats screen that shows progress p. lift (needs design and everything)
 
 - Cycle overview screen (needs design and everything)

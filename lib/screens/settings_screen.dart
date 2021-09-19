@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
+import 'package:liftcalculator/models/cycleWeek.dart';
 import 'package:liftcalculator/models/lift.dart';
 
 import 'package:liftcalculator/models/profile.dart';
@@ -51,12 +52,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
             step: 1,
             min: 1,
             max: 3,
-            value: profile.cycleWeek.toDouble(),
+            value: profile.cycleWeek.week.toDouble(),
             onChanged: (value) =>
-                storeSetting(context, 'Current_Week', value.toInt()),
-          ),
+                storeSetting(
+                  context, 
+                  'Current_Week', 
+                  CycleWeek(value.toInt()).toString()
+                  )
+            ),
           buildCycleTemplateSetting(context, profile),
           generateSampleData(context, profile),
+          buildResetCycleWeekSetting(context, profile),
         ],
       ),
     );
@@ -136,15 +142,15 @@ ListTile generateSampleData(BuildContext context, UserProfile profile) {
         Random random = new Random();
         // Setup sample values for TM
         profile.liftList.forEach((trainingMax) {
-          trainingMax.storeValue('reps', random.nextInt(9)+1);
+          trainingMax.storeValue('reps', random.nextInt(9) + 1);
           trainingMax.storeValue('weight', random.nextInt(80) + 30);
           trainingMax.saveData();
         });
         for (var i = 0; i < 4; i++) {
           for (var j = 1; j < 10; j++) {
             // Generate sample lifts
-            Lift _tempLift = Lift(
-                i, DateTime(2021, 1, j), WeightReps(random.nextInt(80) + 30, random.nextInt(10)));
+            Lift _tempLift = Lift(i, DateTime(2021, 1, j),
+                WeightReps(random.nextInt(80) + 30, random.nextInt(10)));
             writeToDB(profile, _tempLift);
           }
         }
@@ -154,4 +160,30 @@ ListTile generateSampleData(BuildContext context, UserProfile profile) {
 storeSetting(context, String referenceVar, dynamic value) async {
   Provider.of<UserProfile>(context, listen: false)
       .storeUserSetting(referenceVar, value);
+}
+
+buildResetCycleWeekSetting(BuildContext context, UserProfile profile) {
+  return ListTile(
+      title: Text('Reset current weeks progress'),
+      trailing: Icon(Icons.keyboard_arrow_right),
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text('Are you sure?'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => {
+                        profile.cycleWeek.resetWeekProgress(user: profile),
+                        Navigator.pop(context, 'Saved')
+                      },
+                      child: const Text('Delete progress'),
+                    )
+                  ],
+                ));
+      });
 }

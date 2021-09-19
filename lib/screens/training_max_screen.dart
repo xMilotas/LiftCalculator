@@ -22,7 +22,7 @@ class _TrainingMaxConfigScreenState extends State<TrainingMaxConfigScreen> {
       return Splash();
     } else
       return Scaffold(
-        appBar: buildAppBar(context),
+        appBar: buildAppBar(context, "1 RM Calculator"),
         drawer: buildDrawer(context),
         body: SingleChildScrollView(
           child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
