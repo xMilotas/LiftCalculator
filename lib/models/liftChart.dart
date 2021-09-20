@@ -2,7 +2,7 @@ import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:charts_flutter/src/text_element.dart' as chartsTextElement;
-import 'lift.dart';
+import 'dbLift.dart';
 
 class LiftChart extends StatefulWidget {
   final List<Series<dynamic, DateTime>> seriesList;
@@ -18,14 +18,14 @@ class LiftChart extends StatefulWidget {
 }
 
 class _SelectionCallbackState extends State<LiftChart> {
-  Lift? lift;
+  DbLift? lift;
 
   // Listens to the underlying selection changes, and updates the information
   // relevant to building the primitive legend like information under the
   // chart.
   _onSelectionChanged(SelectionModel model) {
     final selectedDatum = model.selectedDatum;
-    Lift? selectedLift;
+    DbLift? selectedLift;
 
     if (selectedDatum.isNotEmpty) {
       selectedLift = selectedDatum.first.datum;

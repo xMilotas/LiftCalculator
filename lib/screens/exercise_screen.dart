@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/drawer.dart';
-import 'package:liftcalculator/models/lift.dart';
+import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/profile.dart';
 
 import 'package:liftcalculator/models/training.dart';
@@ -78,6 +78,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             100,
         exerciseToDo.reps);
     if (reps == -1) reps = weightReps.reps;
+    int calculated1RM = ((weightReps.weight + reps * 0.0333) + reps).round();
 
     return Scaffold(
       appBar: buildAppBar(context, profile.currentExercise.title),
@@ -139,6 +140,11 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                 Divider(
                   thickness: 4,
                 ),
+                Padding(
+                  padding: EdgeInsets.only(top: 10, bottom: 10),
+                  child: Text('Calculated 1RM: $calculated1RM kg',
+                      style: theme.textTheme.headline3!.copyWith(fontSize: 16)),
+                ),
               ],
             ),
             Spacer(),
@@ -154,10 +160,14 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                       // Prevent accidental presses by checking if current exercise is done already
                       if (!profile.cycleWeek
                           .getLiftStatus(profile.currentExercise.id)) {
-                            DateTime today = DateTime.now();
-                        Lift _tempLift = Lift(
+                        DateTime today = DateTime.now();
+                        DbLift _tempLift = DbLift(
                             profile.currentExercise.id,
-                            DateTime(today.year, today.month, today.day), // only store the current day, not time
+                            DateTime(
+                                today.year,
+                                today.month,
+                                today
+                                    .day), // only store the current day, not time
                             WeightReps(weightReps.weight, reps));
                         writeToDB(profile, _tempLift);
                         // Increase counter of exercise --
@@ -202,7 +212,7 @@ drawTrainingFinished(context) => AlertDialog(
       ],
     );
 
-writeToDB(UserProfile profile, Lift lift) async {
+writeToDB(UserProfile profile, DbLift lift) async {
   print("[EXERCISE]: Saving to DB $lift");
   await profile.db.insert('lift', lift.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace);

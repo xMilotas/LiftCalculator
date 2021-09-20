@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:liftcalculator/models/changeLiftDialog.dart';
 import 'package:liftcalculator/screens/db_dump_screen.dart';
 import 'package:liftcalculator/screens/exercise_screen.dart';
 import 'package:liftcalculator/screens/home_screen.dart';
@@ -14,10 +15,16 @@ import 'package:liftcalculator/screens/training_max_screen.dart';
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => UserProfile(),
+    MultiProvider(
+      providers: [
+            ChangeNotifierProvider(
+              create: (context) => UserProfile()
+            ),
+            ChangeNotifierProvider(create: (context) => LiftSelector())
+      ],
       child: MyApp(),
-    ),
+    )
+
   );
 }
 

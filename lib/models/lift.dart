@@ -1,69 +1,15 @@
-import 'dart:async';
-import 'package:liftcalculator/util/weight_reps.dart';
-import 'package:sqflite/sqflite.dart';
-
-// Base Lift class
-
 class Lift {
-  int id;
-  DateTime date;
-  int calculated1RM;
-  WeightReps weightRep;
+  final int id;
+  final String title;
+  final String abbreviation;
 
-  Lift(this.id, this.date, this.weightRep)
-      : calculated1RM =
-            ((weightRep.weight + weightRep.reps * 0.0333) + weightRep.reps)
-                .round();
-
-  Lift.fromMap(Map<dynamic, dynamic> map)
-      : id = map['id'],
-        date = DateTime.fromMillisecondsSinceEpoch(map['date']),
-        weightRep = WeightReps(map['weight'], map['reps']),
-        calculated1RM = map['calculated1RM'];
-
-  /// Transform a Lift into the DB structure:
-  /// Transposes weight rep into separate attributes and transforms date into int
-  Map<String, dynamic> toMap() {
-    return {
-      'id': id,
-      'date': date.millisecondsSinceEpoch,
-      'weight': weightRep.weight,
-      'reps': weightRep.reps,
-      'calculated1RM': calculated1RM,
-    };
-  }
-
-  @override
-  String toString() {
-    return 'Lift{ id: $id, date: $date, \n calculated1RM: $calculated1RM \n $weightRep }';
-  }
+  Lift(this.id, this.title, this.abbreviation);
 }
 
-class LiftHelper {
-  Database db;
-
-  LiftHelper(this.db);
-
-  /// Finds the top 3 lifts with the highest 1RM for the corresponding lift type.
-  Future<List<Lift>> getHighest1RMs(int id) async {
-    List<Map> lifts = await db.query('Lift',
-        where: 'id = ?',
-        whereArgs: [id],
-        orderBy: 'calculated1RM DESC',
-        limit: 3);
-    return List.generate(lifts.length, (i) => Lift.fromMap(lifts[i]));
-  }
-
-  /// Gets all performed lifts for this lift type
-  Future<List<Lift>> getAllLifts(int id) async {
-    List<Map> lifts = await db.query('Lift', where: 'id = ?', whereArgs: [id]);
-    return List.generate(lifts.length, (i) => Lift.fromMap(lifts[i]));
-  }
-
-  /// Gets only the biggest lift per day for a lift type
-  getHighestLiftsPerDay(int id) async {
-    List<Map> lifts = await db.rawQuery(
-        'SELECT a.calculated1RM, a.date, a.id, a.weight, a.reps FROM lift a INNER JOIN(SELECT MAX(calculated1RM) as calculated1RM, date, id FROM lift WHERE ID = $id GROUP BY id, date) b ON a.id = b.id and a.calculated1RM = b.calculated1RM');
-    return List.generate(lifts.length, (i) => Lift.fromMap(lifts[i]));
-  }
-}
+final List<Lift> GLOBAL_ALL_LIFTS = 
+    [
+    Lift(0, "Overhead Press", "OHP"),
+    Lift(1, "Deadlift", "DL"),
+    Lift(2, "Bench Press", "BP"),
+    Lift(3, "Squat", "SQ")
+    ];

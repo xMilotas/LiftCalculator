@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:liftcalculator/models/lift.dart';
 import 'package:liftcalculator/models/profile.dart';
 import 'package:provider/provider.dart';
 
@@ -137,7 +138,7 @@ Widget changeTrainingDialog(BuildContext context, StateSetter setState) {
   var profile = Provider.of<UserProfile>(context, listen: false);
   String? _trainingOption = profile.currentExercise.abbreviation;
   List<Widget> output = [];
-  profile.liftList.forEach((e) {
+  GLOBAL_ALL_LIFTS.forEach((e) {
     bool isCompleted = profile.cycleWeek.getLiftStatus(e.id);
     RadioListTile temp = RadioListTile<String>(
       title: !isCompleted

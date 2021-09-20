@@ -3,7 +3,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinbox/material.dart';
 import 'package:liftcalculator/models/cycleWeek.dart';
-import 'package:liftcalculator/models/lift.dart';
+import 'package:liftcalculator/models/dbLift.dart';
 
 import 'package:liftcalculator/models/profile.dart';
 import 'package:liftcalculator/screens/exercise_screen.dart';
@@ -149,7 +149,7 @@ ListTile generateSampleData(BuildContext context, UserProfile profile) {
         for (var i = 0; i < 4; i++) {
           for (var j = 1; j < 10; j++) {
             // Generate sample lifts
-            Lift _tempLift = Lift(i, DateTime(2021, 1, j),
+            DbLift _tempLift = DbLift(i, DateTime(2021, 1, j),
                 WeightReps(random.nextInt(80) + 30, random.nextInt(10)));
             writeToDB(profile, _tempLift);
           }

@@ -3,7 +3,7 @@ import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/card.dart';
 import 'package:liftcalculator/models/databaseLoadIndicator.dart';
 import 'package:liftcalculator/models/drawer.dart';
-import 'package:liftcalculator/models/lift.dart';
+import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/profile.dart';
 
 import 'package:liftcalculator/main.dart';
@@ -71,10 +71,10 @@ buildStatsCard(UserProfile user) {
     LiftHelper helper = LiftHelper(user.db);
     return FutureBuilder(
         future: helper.getHighest1RMs(user.currentExercise.id),
-        builder: (BuildContext context, AsyncSnapshot<List<Lift>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<DbLift>> snapshot) {
           List<Widget> output;
           if (snapshot.hasData) {
-            List<Lift> data = snapshot.data!;
+            List<DbLift> data = snapshot.data!;
             if (data.length == 0)
               output = [Text('You have not performed any lifts yet')];
             else {
