@@ -69,7 +69,7 @@ class CycleWeek {
       resetWeekProgress();
     }
     user.storeUserSetting('Current_Week', this.toString());
-    user.storeUserSetting('Current_Exercise', liftId + 1);
+    user.storeUserSetting('Current_Exercise', getNextLiftId(liftId));
   }
 
   /// Returns wether or not a lift is completed
@@ -86,6 +86,16 @@ class CycleWeek {
       default:
         return false;
     }
+  }
+
+  /// Selects the next exercise
+  /// Checks wether next lift is already completed - finds first non-completed lift
+  int getNextLiftId(int currentLiftId) {
+    int nextId = currentLiftId + 1;
+    if (getLiftStatus(nextId))
+      return getNextLiftId(nextId);
+    else
+      return nextId;
   }
 
   /// Resets the current week
