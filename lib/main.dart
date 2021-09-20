@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:liftcalculator/models/changeLiftDialog.dart';
+import 'package:liftcalculator/models/dbLift.dart';
+import 'package:liftcalculator/models/selectedLift.dart';
 import 'package:liftcalculator/screens/db_dump_screen.dart';
 import 'package:liftcalculator/screens/exercise_screen.dart';
 import 'package:liftcalculator/screens/home_screen.dart';
 import 'package:liftcalculator/screens/settings_screen.dart';
 import 'package:liftcalculator/screens/stats_screen.dart';
 import 'package:liftcalculator/screens/training_max_display_screen.dart';
+import 'package:liftcalculator/util/weight_reps.dart';
 import 'package:provider/provider.dart';
 
 import 'package:liftcalculator/models/profile.dart';
@@ -20,7 +23,8 @@ void main() {
             ChangeNotifierProvider(
               create: (context) => UserProfile()
             ),
-            ChangeNotifierProvider(create: (context) => LiftSelector())
+            ChangeNotifierProvider(create: (context) => LiftSelector()),
+            ChangeNotifierProvider(create: (context) => StatsSelectedLift(DbLift(0,DateTime.now(),WeightReps(0,0))))
       ],
       child: MyApp(),
     )

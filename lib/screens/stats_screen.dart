@@ -1,8 +1,5 @@
-import 'dart:math';
 import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:flutter/scheduler.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/databaseLoadIndicator.dart';
 import 'package:liftcalculator/models/drawer.dart';
@@ -45,7 +42,7 @@ buildCharts(UserProfile user) {
               data: e.value,
             );
             liftCharts.add(SizedBox(
-                height: 250.0,
+                height: 280.0,
                 child: LiftChart([liftSeries], user.liftList[e.key].title)));
           }
           output = ListView(children: liftCharts);

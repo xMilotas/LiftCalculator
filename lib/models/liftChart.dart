@@ -2,6 +2,8 @@ import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:charts_flutter/src/text_element.dart' as chartsTextElement;
+import 'package:liftcalculator/models/selectedLift.dart';
+import 'package:provider/provider.dart';
 import 'dbLift.dart';
 
 class LiftChart extends StatefulWidget {
@@ -18,31 +20,12 @@ class LiftChart extends StatefulWidget {
 }
 
 class _SelectionCallbackState extends State<LiftChart> {
-  DbLift? lift;
-
-  // Listens to the underlying selection changes, and updates the information
-  // relevant to building the primitive legend like information under the
-  // chart.
-  _onSelectionChanged(SelectionModel model) {
-    final selectedDatum = model.selectedDatum;
-    DbLift? selectedLift;
-
-    if (selectedDatum.isNotEmpty) {
-      selectedLift = selectedDatum.first.datum;
-    }
-
-    // Request a build.
-    setState(() {
-      lift = selectedLift;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     // The children consist of a Chart and Text widgets below to hold the info.
     final children = <Widget>[
       new SizedBox(
-          height: 150.0,
+          height: 270.0,
           child: new TimeSeriesChart(
             widget.seriesList,
             animate: widget.animate,
@@ -60,14 +43,13 @@ class _SelectionCallbackState extends State<LiftChart> {
                   radiusPaddingPx: 3.0,
                   showVerticalFollowLine:
                       LinePointHighlighterFollowLineType.nearest,
-                  // symbolRenderer:
-                  //     MySymbolRenderer(MediaQuery.of(context).size)
-                  ),
+                  symbolRenderer:
+                      MySymbolRenderer(MediaQuery.of(context).size, context)),
             ],
             selectionModels: [
               new SelectionModelConfig(
                 type: SelectionModelType.info,
-                changedListener: _onSelectionChanged,
+                changedListener: handleChange,
               )
             ],
           )),
@@ -75,35 +57,48 @@ class _SelectionCallbackState extends State<LiftChart> {
 
     return new Column(children: children);
   }
+
+  handleChange(SelectionModel model) {
+    final selectedDatum = model.selectedDatum;
+    DbLift? selectedLift;
+    if (selectedDatum.isNotEmpty) {
+      selectedLift = selectedDatum.first.datum;
+      print('SELECTION: ${model.selectedDatum.first.datum}');
+      StatsSelectedLift selectorHelper =
+          Provider.of<StatsSelectedLift>(context, listen: false);
+      selectorHelper.changeLift(selectedLift!);
+    }
+  }
 }
 
-// class MySymbolRenderer extends CircleSymbolRenderer {
-//   final Size size;
-//   MySymbolRenderer(this.size);
+class MySymbolRenderer extends CircleSymbolRenderer {
+  final Size size;
+  BuildContext context;
+  MySymbolRenderer(this.size, this.context);
 
-//   @override
-//   void paint(ChartCanvas canvas, Rectangle<num> bounds,
-//       {List<int>? dashPattern,
-//       Color? fillColor,
-//       FillPatternType? fillPattern,
-//       Color? strokeColor,
-//       double? strokeWidthPx}) {
-//     print("[CUSTOM DRAWER CALLED]: ");
-//     final center = Point(
-//       bounds.left + (bounds.width / 2),
-//       bounds.top + (bounds.height / 2),
-//     );
-//     final radius = min(bounds.width, bounds.height) / 2;
-//     canvas.drawPoint(
-//         point: center,
-//         radius: radius,
-//         fill: getSolidFillColor(fillColor),
-//         stroke: strokeColor,
-//         strokeWidthPx: getSolidStrokeWidthPx(strokeWidthPx));
-    
-//       final TextElement textElement =
-//           chartsTextElement.TextElement(lift!.weightRep.toString());
-//       canvas.drawText(textElement, 150, 45);
-//     }
-//   }
-// }
+  @override
+  void paint(ChartCanvas canvas, Rectangle<num> bounds,
+      {List<int>? dashPattern,
+      Color? fillColor,
+      FillPatternType? fillPattern,
+      Color? strokeColor,
+      double? strokeWidthPx}) {
+    final center = Point(
+      bounds.left + (bounds.width / 2),
+      bounds.top + (bounds.height / 2),
+    );
+    final radius = min(bounds.width, bounds.height) / 2;
+    canvas.drawPoint(
+        point: center,
+        radius: radius,
+        fill: getSolidFillColor(fillColor),
+        stroke: strokeColor,
+        strokeWidthPx: getSolidStrokeWidthPx(strokeWidthPx));
+    DbLift selectedElement =
+        Provider.of<StatsSelectedLift>(context, listen: false).selectedLift;
+
+    final TextElement textElement = chartsTextElement.TextElement(
+        '${selectedElement.calculated1RM} kg via ${selectedElement.weightRep.toString()}');
+    canvas.drawText(textElement, 150, 80);
+  }
+}
