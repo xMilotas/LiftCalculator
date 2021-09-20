@@ -11,7 +11,7 @@ class LiftChart extends StatefulWidget {
   final String liftTitle;
   final bool animate;
 
-  LiftChart(this.seriesList, this.liftTitle, {this.animate = false});
+  LiftChart(this.seriesList, this.liftTitle, {this.animate = true});
 
   // We need a Stateful widget to build the selection details with the current
   // selection as the state.
@@ -22,6 +22,7 @@ class LiftChart extends StatefulWidget {
 class _SelectionCallbackState extends State<LiftChart> {
   @override
   Widget build(BuildContext context) {
+    final now = DateTime.now();
     // The children consist of a Chart and Text widgets below to hold the info.
     final children = <Widget>[
       new SizedBox(
@@ -29,10 +30,26 @@ class _SelectionCallbackState extends State<LiftChart> {
           child: new TimeSeriesChart(
             widget.seriesList,
             animate: widget.animate,
+            primaryMeasureAxis: new NumericAxisSpec(
+            tickProviderSpec: BasicNumericTickProviderSpec(desiredTickCount: 5),  
+            renderSpec: GridlineRendererSpec(
+                lineStyle: LineStyleSpec(
+              dashPattern: [4, 4],
+                ),
+              labelStyle: TextStyleSpec(color: MaterialPalette.white)
+            ),
+            ),
+            domainAxis: new DateTimeAxisSpec(
+              tickProviderSpec: DayTickProviderSpec(increments: [9]),
+              viewport: DateTimeExtents(start: now.subtract(Duration(days: 30)), end: now),
+              renderSpec: SmallTickRendererSpec(labelStyle: TextStyleSpec(color: MaterialPalette.white))
+            ),
             behaviors: [
+              new PanAndZoomBehavior(),
               new ChartTitle(widget.liftTitle,
                   titleStyleSpec: TextStyleSpec(color: MaterialPalette.white),
                   subTitle: 'Calculated 1RM',
+                  subTitleStyleSpec: TextStyleSpec(color: MaterialPalette.white, fontSize: 14),
                   behaviorPosition: BehaviorPosition.top,
                   titleOutsideJustification: OutsideJustification.start,
                   innerPadding: 18),

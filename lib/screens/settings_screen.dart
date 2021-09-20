@@ -46,23 +46,19 @@ class _SettingsScreenState extends State<SettingsScreen> {
             },
           ),
           SpinBox(
-            decoration: InputDecoration(
-              labelText: 'Current Training Week',
-            ),
-            step: 1,
-            min: 1,
-            max: 3,
-            value: profile.cycleWeek.week.toDouble(),
-            onChanged: (value) =>
-                storeSetting(
-                  context, 
-                  'Current_Week', 
-                  CycleWeek(value.toInt()).toString()
-                  )
-            ),
+              decoration: InputDecoration(
+                labelText: 'Current Training Week',
+              ),
+              step: 1,
+              min: 1,
+              max: 3,
+              value: profile.cycleWeek.week.toDouble(),
+              onChanged: (value) => storeSetting(context, 'Current_Week',
+                  CycleWeek(value.toInt()).toString())),
           buildCycleTemplateSetting(context, profile),
           generateSampleData(context, profile),
           buildResetCycleWeekSetting(context, profile),
+          deleteTrainingData(context, profile)
         ],
       ),
     );
@@ -146,15 +142,62 @@ ListTile generateSampleData(BuildContext context, UserProfile profile) {
           trainingMax.storeValue('weight', random.nextInt(80) + 30);
           trainingMax.saveData();
         });
-        for (var i = 0; i < 4; i++) {
-          for (var j = 1; j < 10; j++) {
-            // Generate sample lifts
-            DbLift _tempLift = DbLift(i, DateTime(2021, 1, j),
-                WeightReps(random.nextInt(80) + 30, random.nextInt(10)));
+        for (var liftId = 0; liftId < 4; liftId++) {
+          for (var lift = 1; lift < 50; lift++) {
+            // Generate sample lifts - 1 lift is performed every 9th day
+            DbLift _tempLift = DbLift(
+                liftId,
+                DateTime(2021, 7, liftId + 2).add(Duration(days: 9 + lift)),
+                WeightReps(random.nextInt(80) + 30, random.nextInt(10) + 1));
             writeToDB(profile, _tempLift);
           }
         }
       });
+}
+
+ListTile deleteTrainingData(BuildContext context, UserProfile profile) {
+  return ListTile(
+      title: Text('Delete all data'),
+      trailing: Icon(Icons.keyboard_arrow_right),
+      onTap: () {
+        showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+                  title: const Text('Are you sure?'),
+                  actions: <Widget>[
+                    TextButton(
+                      onPressed: () => Navigator.pop(context, 'Cancel'),
+                      child: const Text('Cancel'),
+                    ),
+                    TextButton(
+                      onPressed: () => {
+                        deleteDB(profile),
+                            ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: Colors.blueGrey,
+                              content: const Text('All data has been deleted'),
+                              duration: const Duration(milliseconds: 1500),
+                              width: 280.0,
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0
+                              ),
+                              behavior: SnackBarBehavior.floating,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10.0),
+                              ),
+                            ),
+                          ),
+                        Navigator.pop(context, 'Saved')
+                        },
+                      child: const Text('Delete all progress'),
+                    )
+                  ],
+                ));
+      });
+}
+
+deleteDB(UserProfile profile) async {
+  await profile.db.delete('Lift');
 }
 
 storeSetting(context, String referenceVar, dynamic value) async {

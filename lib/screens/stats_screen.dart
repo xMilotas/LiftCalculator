@@ -43,7 +43,7 @@ buildCharts(UserProfile user) {
             );
             liftCharts.add(SizedBox(
                 height: 280.0,
-                child: LiftChart([liftSeries], user.liftList[e.key].title)));
+                child: Card(color: Colors.blueGrey.shade900, child: LiftChart([liftSeries], user.liftList[e.key].title))));
           }
           output = ListView(children: liftCharts);
         } else
