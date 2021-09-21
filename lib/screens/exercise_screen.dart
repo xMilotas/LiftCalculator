@@ -78,7 +78,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             100,
         exerciseToDo.reps);
     if (reps == -1) reps = weightReps.reps;
-    int calculated1RM = ((weightReps.weight + reps * 0.0333) + reps).round();
+    int calculated1RM = ((weightReps.weight * reps * 0.0333) + weightReps.weight).round();
 
     return Scaffold(
       appBar: buildAppBar(context, profile.currentExercise.title),

@@ -12,7 +12,7 @@ class DbLift {
 
   DbLift(this.id, this.date, this.weightRep)
       : calculated1RM =
-            ((weightRep.weight + weightRep.reps * 0.0333) + weightRep.reps)
+            ((weightRep.weight * weightRep.reps * 0.0333) + weightRep.weight)
                 .round();
 
   DbLift.fromMap(Map<dynamic, dynamic> map)
