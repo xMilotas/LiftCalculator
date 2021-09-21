@@ -42,7 +42,10 @@ buildCharts(UserProfile user) {
               measureFn: (DbLift lift, _) => lift.calculated1RM,
               data: e.value,
             );
-            liftCharts.add(SizedBox(
+            liftCharts.add(
+              Padding(
+                padding: EdgeInsets.only(top: 4),
+                child: SizedBox(
                 height: 300.0,
                 child: 
                   Stack(
@@ -68,7 +71,8 @@ buildCharts(UserProfile user) {
                           ),
                     ],
                   )
-              ));
+              )
+            ));
           }
           output = ListView(children: liftCharts);
         } else

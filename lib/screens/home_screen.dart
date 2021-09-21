@@ -56,9 +56,9 @@ buildCycleCard() {
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text('Cycle Type:   ' + prog.cycleType),
-                Text('Cycle Number: ' + user.cycleNumber.toString()),
-                Text('Current Week: ' + user.cycleWeek.toString()),
+                Text('Cycle Type:          ' + prog.cycleType),
+                Text('Cycle Number:     ' + user.cycleNumber.toString()),
+                Text('Current Week:      ' + user.cycleWeek.week.toString()),
               ],
             ),
             'graphics/cycle.png'),

@@ -10,7 +10,7 @@ Thus, I decided to build my own.
 This is my first project in Flutter, there are probably a lot of things that could be done more efficient or in a different way - this is my way of learning something new, while giving it a purpose in my day to day life. 
 
 ## Features
-The features are mostly tied to my own usage / gym habits. Thus at the moment I only support 1 leader and 1 anchor template. (Boring but big and FSL with Widowmakers)
+The features are mostly tied to my own usage / gym habits. Thus at the moment I only support 1 leader and 1 anchor template. (Boring But Big and FSL with Widowmakers)
 
 - Calculate training plan for every lift/week according to the current cycle
 - Stats tracking
@@ -18,12 +18,18 @@ The features are mostly tied to my own usage / gym habits. Thus at the moment I 
 
 
 
-TODO:
-- [ ] Fix navigation
--   Add assistance class + templates - should be tied to current exercise
--   Add assistance to exercise
-- Stats screen that shows progress p. lift (needs design and everything)
-
-- Cycle overview screen (needs design and everything)
-
+### Dev-Notes
+-  🐛 Fix navigation 
+-  ✨ Add assistance class + templates - should be tied to current exercise
+-  ✨ Add assistance to exercise
+-  ✨ Cycle overview screen (needs design and everything)
+  
 - Intro screen on initial startup -- walk trough and TM input screen
+
+## Stats
+-  Think about an option to show all lifts done during a day.(Stats)
+
+### Make data shown at stats changeable
+- [x] 1RM, 
+- [ ] TM: Needs storage of TM over time --> DB, 
+- [ ] Weight --> maybe just max weight on a given day
