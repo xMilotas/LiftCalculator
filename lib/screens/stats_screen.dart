@@ -6,6 +6,7 @@ import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/profile.dart';
 import 'package:liftcalculator/models/liftChart.dart';
+import 'package:liftcalculator/screens/stats_full_screen.dart';
 import 'package:provider/provider.dart';
 
 class StatsScreen extends StatefulWidget {
@@ -42,8 +43,32 @@ buildCharts(UserProfile user) {
               data: e.value,
             );
             liftCharts.add(SizedBox(
-                height: 280.0,
-                child: Card(color: Colors.blueGrey.shade900, child: LiftChart([liftSeries], user.liftList[e.key].title))));
+                height: 300.0,
+                child: 
+                  Stack(
+                    children: [
+                      Card(
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+                        color: Colors.blueGrey.shade900, 
+                        child: 
+                          Padding (
+                            padding: EdgeInsets.all(8), 
+                            child:LiftChart([liftSeries], user.liftList[e.key].title),
+                            )
+                          ),
+                    Positioned(
+                            top: 15,
+                            right: 15,
+                            child: IconButton(icon: Icon(Icons.more_vert), onPressed: () =>  print('hi')),
+                          ),
+                    Positioned(
+                            top: 220,
+                            right: 15,
+                            child: IconButton(icon: Icon(Icons.fullscreen), onPressed: () => Navigator.of(context).push(MaterialPageRoute(builder: (context) => StatsFullScreen(user.liftList[e.key].id)))),
+                          ),
+                    ],
+                  )
+              ));
           }
           output = ListView(children: liftCharts);
         } else

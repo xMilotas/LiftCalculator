@@ -2,16 +2,20 @@ import 'package:charts_flutter/flutter.dart';
 import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:charts_flutter/src/text_element.dart' as chartsTextElement;
+import 'package:charts_flutter/src/text_style.dart' as style;
 import 'package:liftcalculator/models/selectedLift.dart';
 import 'package:provider/provider.dart';
 import 'dbLift.dart';
+import 'package:intl/intl.dart';
 
 class LiftChart extends StatefulWidget {
   final List<Series<dynamic, DateTime>> seriesList;
   final String liftTitle;
   final bool animate;
+  final bool fullscreen;
 
-  LiftChart(this.seriesList, this.liftTitle, {this.animate = true});
+  LiftChart(this.seriesList, this.liftTitle,
+      {this.animate = true, this.fullscreen = false});
 
   // We need a Stateful widget to build the selection details with the current
   // selection as the state.
@@ -26,30 +30,34 @@ class _SelectionCallbackState extends State<LiftChart> {
     // The children consist of a Chart and Text widgets below to hold the info.
     final children = <Widget>[
       new SizedBox(
-          height: 270.0,
+          height: (widget.fullscreen)
+              ? MediaQuery.of(context).size.height * 0.8
+              : 270.0,
           child: new TimeSeriesChart(
             widget.seriesList,
             animate: widget.animate,
             primaryMeasureAxis: new NumericAxisSpec(
-            tickProviderSpec: BasicNumericTickProviderSpec(desiredTickCount: 5),  
-            renderSpec: GridlineRendererSpec(
-                lineStyle: LineStyleSpec(
-              dashPattern: [4, 4],
-                ),
-              labelStyle: TextStyleSpec(color: MaterialPalette.white)
-            ),
+              tickProviderSpec: BasicNumericTickProviderSpec(
+                  desiredTickCount: (widget.fullscreen) ? 8 : 5),
+              renderSpec: GridlineRendererSpec(
+                  lineStyle: LineStyleSpec(
+                    dashPattern: [4, 4],
+                  ),
+                  labelStyle: TextStyleSpec(color: MaterialPalette.white)),
             ),
             domainAxis: new DateTimeAxisSpec(
-              tickProviderSpec: DayTickProviderSpec(increments: [9]),
-              viewport: DateTimeExtents(start: now.subtract(Duration(days: 30)), end: now),
-              renderSpec: SmallTickRendererSpec(labelStyle: TextStyleSpec(color: MaterialPalette.white))
-            ),
+                tickProviderSpec: DayTickProviderSpec(increments: [9]),
+                viewport: DateTimeExtents(
+                    start: now.subtract(Duration(days: 30)), end: now),
+                renderSpec: SmallTickRendererSpec(
+                    labelStyle: TextStyleSpec(color: MaterialPalette.white))),
             behaviors: [
               new PanAndZoomBehavior(),
               new ChartTitle(widget.liftTitle,
                   titleStyleSpec: TextStyleSpec(color: MaterialPalette.white),
                   subTitle: 'Calculated 1RM',
-                  subTitleStyleSpec: TextStyleSpec(color: MaterialPalette.white, fontSize: 14),
+                  subTitleStyleSpec:
+                      TextStyleSpec(color: MaterialPalette.white, fontSize: 14),
                   behaviorPosition: BehaviorPosition.top,
                   titleOutsideJustification: OutsideJustification.start,
                   innerPadding: 18),
@@ -114,8 +122,15 @@ class MySymbolRenderer extends CircleSymbolRenderer {
     DbLift selectedElement =
         Provider.of<StatsSelectedLift>(context, listen: false).selectedLift;
 
-    final TextElement textElement = chartsTextElement.TextElement(
+    var dateStyle = style.TextStyle();
+    dateStyle.fontSize = 11;
+    String formattedDate = DateFormat('yyyy-MM-dd').format(selectedElement.date);
+
+    final TextElement date = chartsTextElement.TextElement(formattedDate, style: dateStyle);
+
+    final TextElement weightReps = chartsTextElement.TextElement(
         '${selectedElement.calculated1RM} kg via ${selectedElement.weightRep.toString()}');
-    canvas.drawText(textElement, 150, 80);
+    canvas.drawText(weightReps, 150, 45);
+    canvas.drawText(date, 190, 28);
   }
 }
