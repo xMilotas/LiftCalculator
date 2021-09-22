@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:liftcalculator/models/cycleWeek.dart';
+import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/trainingMax.dart';
 import 'package:liftcalculator/util/db.dart';
 import 'package:liftcalculator/util/preferences.dart';
@@ -18,6 +19,7 @@ class UserProfile with ChangeNotifier {
   List<TrainingMax> liftList = [];
   late LiftProgram program;
   late Database db;
+  late Map<int, int> max1RMs = {};
 
   UserProfile() {
     _loadData();
@@ -35,11 +37,7 @@ class UserProfile with ChangeNotifier {
     this.liftList.insert(2, bp);
     this.liftList.insert(3, sq);
     // Calculate training maxes & save them if not configured
-    this.liftList.forEach(
-        (lift) => {
-        lift.calculateTM(0),
-        lift.saveData()
-    });
+    this.liftList.forEach((lift) => {lift.calculateTM(0), lift.saveData()});
 
     _loadSettings();
     _loadDBConnection();
@@ -77,6 +75,9 @@ class UserProfile with ChangeNotifier {
   _loadDBConnection() async {
     DatabaseClient client = await DatabaseClient.create();
     this.db = client.db;
+    LiftHelper helper = LiftHelper(this.db);
+    this.max1RMs = await helper.get1RMMaxes();
+    print('[USER_PROFILE]: All 1RMs: ${this.max1RMs}');
   }
 
   // Stores any user defined setting via shared prefs and informs listeners
@@ -84,13 +85,12 @@ class UserProfile with ChangeNotifier {
     Preferences pref = await Preferences.create();
     if (value is String) pref.setSharedPrefValueString(referenceVar, value);
     if (value is int) pref.setSharedPrefValueInt(referenceVar, value);
-    
+
     // Handle TM changes
-    if(referenceVar == 'Training_Max_Percentage') this.liftList.forEach(
-              (lift) => {
-              lift.calculateTM(value),
-              lift.saveData()
-          });
+    if (referenceVar == 'Training_Max_Percentage')
+      this
+          .liftList
+          .forEach((lift) => {lift.calculateTM(value), lift.saveData()});
     refresh();
   }
 

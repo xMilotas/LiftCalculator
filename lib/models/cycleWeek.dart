@@ -92,6 +92,7 @@ class CycleWeek {
   /// Checks wether next lift is already completed - finds first non-completed lift
   int getNextLiftId(int currentLiftId) {
     int nextId = currentLiftId + 1;
+    if (nextId == 4) nextId = 0;
     if (getLiftStatus(nextId))
       return getNextLiftId(nextId);
     else

@@ -66,4 +66,23 @@ class LiftHelper {
         'SELECT a.calculated1RM, a.date, a.id, a.weight, a.reps FROM lift a INNER JOIN(SELECT MAX(calculated1RM) as calculated1RM, date, id FROM lift WHERE ID = $id GROUP BY id, date) b ON a.id = b.id and a.calculated1RM = b.calculated1RM');
     return List.generate(lifts.length, (i) => DbLift.fromMap(lifts[i]));
   }
+
+
+    /// Gets only the biggest lift per day for a lift type
+  getHighestWeightPerDay(int id) async {
+    List<Map> lifts = await db.rawQuery(
+        'SELECT a.calculated1RM, a.date, a.id, a.weight, a.reps FROM lift a INNER JOIN(SELECT MAX(weight) as weight, date, id FROM lift WHERE ID = $id GROUP BY id, date) b ON a.id = b.id and a.weight = b.weight');
+    return List.generate(lifts.length, (i) => DbLift.fromMap(lifts[i]));
+  }
+
+  /// Gets 1RM maxes for all lifts
+  Future<Map<int, int>> get1RMMaxes() async {
+    List<Map> lifts = await db.rawQuery(
+        'SELECT MAX(calculated1RM) as calculated1RM, id FROM lift GROUP BY id');
+    var result = <int, int>{};
+    lifts.forEach((e) {
+      result[e['id']] = e['calculated1RM'];
+    });
+    return result;
+  }
 }

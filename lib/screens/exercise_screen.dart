@@ -79,7 +79,8 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
         exerciseToDo.reps);
     if (reps == -1) reps = weightReps.reps;
     int calculated1RM = ((weightReps.weight * reps * 0.0333) + weightReps.weight).round();
-
+    int maxCalculated1RM = profile.max1RMs[profile.currentExercise.id]!;
+    int repsForNew1RM = ((maxCalculated1RM - weightReps.weight) / weightReps.weight * 30.03003).round();
     return Scaffold(
       appBar: buildAppBar(context, profile.currentExercise.title),
       body: Center(
@@ -145,6 +146,13 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                   child: Text('Calculated 1RM: $calculated1RM kg',
                       style: theme.textTheme.headline3!.copyWith(fontSize: 16)),
                 ),
+                if (exerciseToDo.pr)
+                  Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Text('Perform $repsForNew1RM+ reps for a new PR',
+                        style:
+                            theme.textTheme.headline3!.copyWith(fontSize: 16)),
+                  ),
               ],
             ),
             Spacer(),
@@ -174,14 +182,12 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                         updateExercise(exerciseToDo.sets);
                         // If we have a next exercise then redraw the screen with the next one, if not move to home screen
                         if (cycleDone && coreDone) {
-                          profile.cycleWeek.markLiftAsDone(
-                              profile.currentExercise.id, profile);
                           // Draw overlay
                           showDialog(
                               barrierDismissible: false,
                               context: context,
                               builder: (context) =>
-                                  drawTrainingFinished(context));
+                                  drawTrainingFinished(context, profile));
                         }
                       }
                     },
@@ -198,13 +204,15 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   }
 }
 
-drawTrainingFinished(context) => AlertDialog(
+drawTrainingFinished(BuildContext context, UserProfile profile) => AlertDialog(
       title: Text('Session done'),
       content: Text('Well done - Time to rest'),
       actions: [
         TextButton(
           onPressed: () {
-            Provider.of<UserProfile>(context, listen: false).refresh();
+            profile.cycleWeek.markLiftAsDone(
+                              profile.currentExercise.id, profile);
+            profile.refresh();
             Navigator.pushNamed(context, '/');
           },
           child: Text('AWESOME'),
