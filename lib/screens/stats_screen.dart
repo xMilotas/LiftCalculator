@@ -11,25 +11,25 @@ import 'package:liftcalculator/screens/stats_full_screen.dart';
 import 'package:provider/provider.dart';
 
 class StatsScreen extends StatefulWidget {
+  
   @override
   _StatsScreenState createState() => _StatsScreenState();
 }
 
 class _StatsScreenState extends State<StatsScreen> {
-
+  String _selectedStat = '1RM';
   @override
   Widget build(BuildContext context) {
     var profile = Provider.of<UserProfile>(context);
-    String selectedStats = Provider.of<StatsSelectedLift>(context).selectedStatsType;
     return Scaffold(
         appBar: buildAppBar(context, "Stats"),
         drawer: buildDrawer(context),
-        body: buildCharts(profile, selectedStats));
+        body: buildCharts(profile));
   }
 
-  buildCharts(UserProfile user, String selectedStats) {
+  buildCharts(UserProfile user) {
     return FutureBuilder(
-        future: dataFetcher(user, selectedStats),
+        future: dataFetcher(user, _selectedStat),
         builder: (BuildContext context,
             AsyncSnapshot<Map<int, List<DbLift>>> snapshot) {
           Widget output;
@@ -41,7 +41,7 @@ class _StatsScreenState extends State<StatsScreen> {
               var liftSeries = new charts.Series<DbLift, DateTime>(
                 id: e.key.toString(),
                 domainFn: (DbLift lift, _) => lift.date,
-                measureFn: (DbLift lift, _) => (selectedStats == '1RM') ? lift.calculated1RM : lift.weightRep.weight,
+                measureFn: (DbLift lift, _) => (_selectedStat == '1RM') ? lift.calculated1RM : lift.weightRep.weight,
                 data: e.value,
               );
               liftCharts.add(Padding(
@@ -57,7 +57,7 @@ class _StatsScreenState extends State<StatsScreen> {
                               child: Padding(
                                 padding: EdgeInsets.all(8),
                                 child: LiftChart(
-                                    [liftSeries], user.liftList[e.key].title, selectedStats),
+                                    [liftSeries], user.liftList[e.key].title, _selectedStat),
                               )),
                           Positioned(
                             top: 15,
@@ -75,7 +75,12 @@ class _StatsScreenState extends State<StatsScreen> {
                                   value: 'Weight',
                                 ),
                               ],
-                              onSelected: (String value) => Provider.of<StatsSelectedLift>(context, listen: false).changeStatsType(value),
+                              onSelected: (String value) =>  {
+                                Provider.of<StatsSelectedLift>(context, listen: false).changeStatsType(value),
+                                setState(() {
+                                  _selectedStat = value;
+                                }),
+                              }
                             ),
                           ),
                           Positioned(
@@ -86,7 +91,7 @@ class _StatsScreenState extends State<StatsScreen> {
                                 onPressed: () => Navigator.of(context).push(
                                     MaterialPageRoute(
                                         builder: (context) => StatsFullScreen(
-                                            user.liftList[e.key].id, selectedStats)))),
+                                            user.liftList[e.key].id, _selectedStat)))),
                           ),
                         ],
                       ))));

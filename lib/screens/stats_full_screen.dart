@@ -47,7 +47,7 @@ buildChart(UserProfile user, int liftId, String selectedStat) {
             liftCharts.add(LiftChart([liftSeries], user.liftList[e.key].title, selectedStat,
                 fullscreen: true));
           }
-          output = ListView(children: liftCharts);
+          output = Column(children: liftCharts);
         } else
           output =
               Center(child: Column(children: [...dataFetchingIndicator()]));
