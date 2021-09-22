@@ -68,13 +68,14 @@ class _SelectionCallbackState extends State<LiftChart> {
                   innerPadding: 18),
               SelectNearest(
                   eventTrigger: SelectionTrigger.tapAndDrag,
-                  selectClosestSeries: true),
+                  selectClosestSeries: true
+                  ),
               LinePointHighlighter(
                   radiusPaddingPx: 3.0,
                   showVerticalFollowLine:
                       LinePointHighlighterFollowLineType.nearest,
                   symbolRenderer:
-                      MySymbolRenderer(MediaQuery.of(context).size, context)),
+                      MySymbolRenderer(MediaQuery.of(context).size, context)), 
             ],
             selectionModels: [
               new SelectionModelConfig(
@@ -93,7 +94,6 @@ class _SelectionCallbackState extends State<LiftChart> {
     DbLift? selectedLift;
     if (selectedDatum.isNotEmpty) {
       selectedLift = selectedDatum.first.datum;
-      print('SELECTION: ${model.selectedDatum.first.datum}');
       StatsSelectedLift selectorHelper =
           Provider.of<StatsSelectedLift>(context, listen: false);
       selectorHelper.changeLift(selectedLift!);
@@ -126,9 +126,9 @@ class MySymbolRenderer extends CircleSymbolRenderer {
         strokeWidthPx: getSolidStrokeWidthPx(strokeWidthPx));
     DbLift selectedElement =
         Provider.of<StatsSelectedLift>(context, listen: false).selectedLift;
-    // String selectedStatsType =
-    //     Provider.of<StatsSelectedLift>(context, listen: false)
-    //         .selectedStatsType;
+    String selectedStatsType =
+        Provider.of<StatsSelectedLift>(context, listen: false)
+            .selectedStatsType;
 
     var dateStyle = style.TextStyle();
     dateStyle.fontSize = 11;
@@ -139,16 +139,17 @@ class MySymbolRenderer extends CircleSymbolRenderer {
         chartsTextElement.TextElement(formattedDate, style: dateStyle);
 
     String displayText = "";
-    // if (selectedStatsType == '1RM') {
-    //   displayText =
-    //       '1RM: ${selectedElement.calculated1RM} kg via ${selectedElement.weightRep.toString()}';
-    // }
-    // if (selectedStatsType == 'Weight') {
-    //   displayText = '${selectedElement.weightRep.toString()}';
-    // }
-
-    final TextElement weightReps = chartsTextElement.TextElement(displayText);
-    canvas.drawText(weightReps, 150, 45);
+    if (selectedStatsType == '1RM') {
+      displayText =
+          '1RM: ${selectedElement.calculated1RM} kg via ${selectedElement.weightRep.toString()}';
+      final TextElement weightReps = chartsTextElement.TextElement(displayText);
+      canvas.drawText(weightReps, 150, 45);
+    }
+    if (selectedStatsType == 'Weight') {
+      displayText = '${selectedElement.weightRep.toString()}   (1RM: ${selectedElement.calculated1RM} kg)';
+      final TextElement weightReps = chartsTextElement.TextElement(displayText);
+      canvas.drawText(weightReps, 170, 45);
+    }
     canvas.drawText(date, 190, 28);
   }
 }
