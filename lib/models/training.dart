@@ -63,12 +63,13 @@ buildTrainingCard() {
 }
 
 /// Returns the calculated weights for a given List of Lift Numbers
-calculateTrainingNumbers(double trainingMax, List<LiftNumber> program) => program
-    .map((e) => LiftNumber(e.weightPercentage, e.reps,
-        weight: (e.weightPercentage / 100 * trainingMax),
-        sets: e.sets,
-        pr: e.pr))
-    .toList();
+calculateTrainingNumbers(double trainingMax, List<LiftNumber> program) =>
+    program
+        .map((e) => LiftNumber(e.weightPercentage, e.reps,
+            weight: (e.weightPercentage / 100 * trainingMax),
+            sets: e.sets,
+            pr: e.pr))
+        .toList();
 
 /// Build training output
 buildAndFormatLiftNumbers(List<LiftNumber> lifts) {
@@ -77,8 +78,10 @@ buildAndFormatLiftNumbers(List<LiftNumber> lifts) {
       .toList();
 }
 
-LiftDay getCurrentWeek(UserProfile user) {
+LiftDay getCurrentWeek(UserProfile user, {int customWeek = 0}) {
   int week = user.cycleWeek.week;
+  if (customWeek != 0) week = customWeek;
+  
   if (week == 1) return user.program.week1;
   if (week == 2)
     return user.program.week2;
@@ -93,4 +96,3 @@ buildSetOutput(LiftNumber lift) {
   }
   return '$sets set of';
 }
-

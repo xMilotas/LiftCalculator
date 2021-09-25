@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:liftcalculator/models/changeLiftDialog.dart';
 import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/selectedLift.dart';
+import 'package:liftcalculator/screens/cycle_overview_screen.dart';
 import 'package:liftcalculator/screens/db_dump_screen.dart';
 import 'package:liftcalculator/screens/exercise_screen.dart';
 import 'package:liftcalculator/screens/home_screen.dart';
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         '/exercise': (context) => ExerciseScreen(),
         '/DbDumpScreen': (context) => DbDumpScreen(),
         '/stats': (context) => StatsScreen(),
+        '/cycleOverview': (context) => CycleOverviewScreen(),
       },
     );
   }
