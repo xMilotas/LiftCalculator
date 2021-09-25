@@ -25,11 +25,3 @@ The features are mostly tied to my own usage / gym habits. Thus at the moment I 
 -  ✨ Cycle overview screen (needs design and everything)
   
 - Intro screen on initial startup -- walk trough and TM input screen
-
-## Stats
--  Think about an option to show all lifts done during a day.(Stats)
-
-### Make data shown at stats changeable
-- [x] 1RM, 
-- [ ] TM: Needs storage of TM over time --> DB, 
-- [ ] Weight --> maybe just max weight on a given day
