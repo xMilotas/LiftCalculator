@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:liftcalculator/models/lift.dart';
 import 'package:liftcalculator/models/profile.dart';
+import 'package:liftcalculator/util/globals.dart';
 import 'package:provider/provider.dart';
 
 class HomeCard {

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:liftcalculator/util/preferences.dart';
 import 'dart:async';
 
+
 class TrainingMax {
   final int id;
   final String title;
@@ -29,17 +30,12 @@ class TrainingMax {
 
   calculateTM(int newTrainingMaxPercentage) {
     // Initial, take 90 as fixed value
-    if(this.trainingMax == 0) {
-          this.trainingMax = (this.current1RM *
-            90 /
-            100)
-        .round().toDouble();
-    } else if(newTrainingMaxPercentage != 0) {
+    if (this.trainingMax == 0) {
+      this.trainingMax = (this.current1RM * 90 / 100).round().toDouble();
+    } else if (newTrainingMaxPercentage != 0) {
       // Calculate via 1RM
-      this.trainingMax = (this.current1RM *
-              newTrainingMaxPercentage /
-              100)
-          .round().toDouble();
+      this.trainingMax =
+          (this.current1RM * newTrainingMaxPercentage / 100).round().toDouble();
     }
   }
 
@@ -79,7 +75,6 @@ class TrainingMax {
         '${this.abbreviation}_TM', this.trainingMax);
     await pref.setSharedPrefValueInt(
         '${this.abbreviation}_1RM', await calculate1RM());
-
     this.current1RM = this.new1RM;
   }
 

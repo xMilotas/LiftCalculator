@@ -19,14 +19,13 @@ class DbDumpScreen extends StatefulWidget {
 class _DbDumpScreenState extends State<DbDumpScreen> {
   @override
   Widget build(BuildContext context) {
-    var profile = Provider.of<UserProfile>(context);
     Lift currentExercise =
         Provider.of<LiftSelector>(context).currentExercise;
     return Scaffold(
       appBar: buildAppBar(context, currentExercise.title),
       body: Scrollbar(
         child: FutureBuilder(
-            future: getDBDump(profile, currentExercise),
+            future: getDBDump(currentExercise),
             builder:
                 (BuildContext context, AsyncSnapshot<List<DbLift>> snapshot) =>
                     buildDBDumpOutput(context, snapshot)),
@@ -35,9 +34,8 @@ class _DbDumpScreenState extends State<DbDumpScreen> {
     );
   }
 
-  Future<List<DbLift>> getDBDump(
-      UserProfile user, Lift currentExercise) async {
-    LiftHelper helper = LiftHelper(user.db);
+  Future<List<DbLift>> getDBDump(Lift currentExercise) async {
+    LiftHelper helper = LiftHelper();
     List<DbLift> allLifts =
         await helper.getHighestLiftsPerDay(currentExercise.id);
     return allLifts;
