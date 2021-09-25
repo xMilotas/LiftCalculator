@@ -22,6 +22,5 @@ The features are mostly tied to my own usage / gym habits. Thus at the moment I 
 -  🐛 Fix navigation 
 -  ✨ Add assistance class + templates - should be tied to current exercise
 -  ✨ Add assistance to exercise
--  ✨ Cycle overview screen (needs design and everything)
   
 - Intro screen on initial startup -- walk trough and TM input screen
