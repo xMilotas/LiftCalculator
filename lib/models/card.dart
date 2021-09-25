@@ -43,7 +43,7 @@ class TappableCard extends StatelessWidget {
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(
                   // Navigate to whatever route was passed in
-                  onTap: () => Navigator.pushReplacementNamed(context, route),
+                  onTap: () => Navigator.pushNamed(context, route),
                   splashColor:
                       Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
                   highlightColor: Colors.transparent,
@@ -57,6 +57,48 @@ class TappableCard extends StatelessWidget {
     );
   }
 }
+
+
+
+class NonTappableCard extends StatelessWidget {
+  final HomeCard cartContent;
+
+  NonTappableCard({required this.cartContent});
+
+  static const height = 355.0;
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      top: false,
+      bottom: false,
+      child: Padding(
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            SizedBox(
+              height: height,
+              child: Card(
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  // Navigate to whatever route was passed in
+                  splashColor:
+                      Theme.of(context).colorScheme.onSurface.withOpacity(0.12),
+                  highlightColor: Colors.transparent,
+                  child: CardContent(cartContent),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
 
 class CardContent extends StatelessWidget {
   final HomeCard _;
