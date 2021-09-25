@@ -1,8 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:liftcalculator/models/cycleWeek.dart';
 import 'package:liftcalculator/models/dbLift.dart';
+import 'package:liftcalculator/models/dbTrainingMax.dart';
 import 'package:liftcalculator/models/trainingMax.dart';
 import 'package:liftcalculator/util/db.dart';
+import 'package:liftcalculator/util/globals.dart';
 import 'package:liftcalculator/util/preferences.dart';
 import 'package:liftcalculator/util/programs.dart';
 import 'package:sqflite/sqflite.dart';
@@ -75,7 +77,8 @@ class UserProfile with ChangeNotifier {
   _loadDBConnection() async {
     DatabaseClient client = await DatabaseClient.create();
     this.db = client.db;
-    LiftHelper helper = LiftHelper(this.db);
+    GLOBAL_DB = this.db;
+    LiftHelper helper = LiftHelper();
     this.max1RMs = await helper.get1RMMaxes();
     print('[USER_PROFILE]: All 1RMs: ${this.max1RMs}');
   }
@@ -88,9 +91,22 @@ class UserProfile with ChangeNotifier {
 
     // Handle TM changes
     if (referenceVar == 'Training_Max_Percentage')
-      this
-          .liftList
-          .forEach((lift) => {lift.calculateTM(value), lift.saveData()});
+      for (var lift in this.liftList) {
+        lift.calculateTM(value);
+        lift.saveData();
+        DateTime today = DateTime.now();
+        DbTrainingMax dbTM =
+            DbTrainingMax(
+              lift.id, 
+              DateTime(
+                    today.year,
+                    today.month,
+                    today.day
+              ),
+              lift.trainingMax
+          );
+          dbTM.writeToDB();
+    }
     refresh();
   }
 

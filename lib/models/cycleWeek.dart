@@ -1,3 +1,4 @@
+import 'package:liftcalculator/models/dbTrainingMax.dart';
 import 'package:liftcalculator/models/profile.dart';
 
 /// Describes a single cycle week and its current state of finished lifts
@@ -59,6 +60,18 @@ class CycleWeek {
           else
             lift.trainingMax = lift.trainingMax + 5;
           lift.saveData();
+          DateTime today = DateTime.now();
+          DbTrainingMax dbTM =
+              DbTrainingMax(
+                lift.id, 
+                DateTime(
+                      today.year,
+                      today.month,
+                      today.day
+                ),
+                lift.trainingMax
+          );
+          dbTM.writeToDB();
         });
       }
       // Go to next week

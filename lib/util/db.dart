@@ -37,5 +37,13 @@ class DatabaseClient {
               id INTEGER PRIMARY KEY,
               lift TEXT NOT NULL
             )""");
+
+    await db.execute("""
+        CREATE TABLE training_max (
+          id INTEGER NOT NULL,
+          date INTEGER NOT NULL,
+          weight DOUBLE NOT NULL,
+          PRIMARY KEY (id, date)
+        )""");
   }
 }

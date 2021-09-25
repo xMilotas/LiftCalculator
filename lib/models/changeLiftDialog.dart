@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/lift.dart';
+import 'package:liftcalculator/util/globals.dart';
 import 'package:provider/provider.dart';
 
 class LiftSelector with ChangeNotifier {
