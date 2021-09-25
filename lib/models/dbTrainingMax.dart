@@ -35,15 +35,18 @@ class DbTrainingMax {
     return List.generate(tms.length, (i) => DbTrainingMax.fromMap(tms[i]));
   }
 
-  /// Gets the current saved training max for this lift type
-  Future<List<DbTrainingMax>> getCurrent(int id) async {
-    List<Map> tms = await GLOBAL_DB!
-        .query('training_max', where: 'id = ?', whereArgs: [id]);
-    return List.generate(tms.length, (i) => DbTrainingMax.fromMap(tms[i]));
-  }
-
   @override
   String toString() {
     return 'TrainingMax{ id: $id, date: $date, \n TrainingMax: $weight }';
+  }
+}
+
+class TrainingMaxHelper{
+  TrainingMaxHelper();
+
+  Future<List<DbTrainingMax>> getAll(int id) async {
+    List<Map> tms = await GLOBAL_DB!
+        .query('training_max', where: 'id = ?', whereArgs: [id]);
+    return List.generate(tms.length, (i) => DbTrainingMax.fromMap(tms[i]));
   }
 }

@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'dart:math';
 import 'package:charts_flutter/src/text_element.dart' as chartsTextElement;
 import 'package:charts_flutter/src/text_style.dart' as style;
+import 'package:liftcalculator/models/dbTrainingMax.dart';
 import 'package:liftcalculator/models/selectedLift.dart';
 import 'package:provider/provider.dart';
 import 'dbLift.dart';
@@ -60,7 +61,9 @@ class _SelectionCallbackState extends State<LiftChart> {
                   titleStyleSpec: TextStyleSpec(color: MaterialPalette.white),
                   subTitle: (widget.selectedStat == '1RM')
                       ? 'Calculated 1RM'
-                      : 'Max Weight',
+                      : (widget.selectedStat == 'Weight')
+                          ? 'Max Weight'
+                          : 'Training Max',
                   subTitleStyleSpec:
                       TextStyleSpec(color: MaterialPalette.white, fontSize: 14),
                   behaviorPosition: BehaviorPosition.top,
@@ -68,14 +71,13 @@ class _SelectionCallbackState extends State<LiftChart> {
                   innerPadding: 18),
               SelectNearest(
                   eventTrigger: SelectionTrigger.tapAndDrag,
-                  selectClosestSeries: true
-                  ),
+                  selectClosestSeries: true),
               LinePointHighlighter(
                   radiusPaddingPx: 3.0,
                   showVerticalFollowLine:
                       LinePointHighlighterFollowLineType.nearest,
                   symbolRenderer:
-                      MySymbolRenderer(MediaQuery.of(context).size, context)), 
+                      MySymbolRenderer(MediaQuery.of(context).size, context)),
             ],
             selectionModels: [
               new SelectionModelConfig(
@@ -92,11 +94,22 @@ class _SelectionCallbackState extends State<LiftChart> {
   handleChange(SelectionModel model) {
     final selectedDatum = model.selectedDatum;
     DbLift? selectedLift;
+    DbTrainingMax? selectedTM;
+
+    String selectedStatsType =
+        Provider.of<StatsSelectedLift>(context, listen: false)
+            .selectedStatsType;
+
     if (selectedDatum.isNotEmpty) {
-      selectedLift = selectedDatum.first.datum;
       StatsSelectedLift selectorHelper =
           Provider.of<StatsSelectedLift>(context, listen: false);
-      selectorHelper.changeLift(selectedLift!);
+      if (selectedStatsType == 'TM') {
+        selectedTM = selectedDatum.first.datum;
+        selectorHelper.changeTrainingMax(selectedTM!);
+      } else {
+        selectedLift = selectedDatum.first.datum;
+        selectorHelper.changeLift(selectedLift!);
+      }
     }
   }
 }
@@ -132,23 +145,38 @@ class MySymbolRenderer extends CircleSymbolRenderer {
 
     var dateStyle = style.TextStyle();
     dateStyle.fontSize = 11;
-    String formattedDate =
-        DateFormat('yyyy-MM-dd').format(selectedElement.date);
-
-    final TextElement date =
-        chartsTextElement.TextElement(formattedDate, style: dateStyle);
-
     String displayText = "";
-    if (selectedStatsType == '1RM') {
-      displayText =
-          '1RM: ${selectedElement.calculated1RM} kg via ${selectedElement.weightRep.toString()}';
+    TextElement date;
+
+    if (selectedStatsType != 'TM') {
+      String formattedDate =
+          DateFormat('yyyy-MM-dd').format(selectedElement.date);
+
+      date = chartsTextElement.TextElement(formattedDate, style: dateStyle);
+
+      if (selectedStatsType == '1RM') {
+        displayText =
+            '1RM: ${selectedElement.calculated1RM} kg via ${selectedElement.weightRep.toString()}';
+        final TextElement weightReps =
+            chartsTextElement.TextElement(displayText);
+        canvas.drawText(weightReps, 150, 45);
+      }
+      if (selectedStatsType == 'Weight') {
+        displayText =
+            '${selectedElement.weightRep.toString()}   (1RM: ${selectedElement.calculated1RM} kg)';
+        final TextElement weightReps =
+            chartsTextElement.TextElement(displayText);
+        canvas.drawText(weightReps, 170, 45);
+      }
+    } else {
+      DbTrainingMax selectedElement =
+          Provider.of<StatsSelectedLift>(context, listen: false).selectedTM;
+      String formattedDate =
+          DateFormat('yyyy-MM-dd').format(selectedElement.date);
+      date = chartsTextElement.TextElement(formattedDate, style: dateStyle);
+      displayText = '${selectedElement.weight.toString()} kg';
       final TextElement weightReps = chartsTextElement.TextElement(displayText);
-      canvas.drawText(weightReps, 150, 45);
-    }
-    if (selectedStatsType == 'Weight') {
-      displayText = '${selectedElement.weightRep.toString()}   (1RM: ${selectedElement.calculated1RM} kg)';
-      final TextElement weightReps = chartsTextElement.TextElement(displayText);
-      canvas.drawText(weightReps, 170, 45);
+      canvas.drawText(weightReps, 198, 45);
     }
     canvas.drawText(date, 190, 28);
   }
