@@ -68,7 +68,7 @@ buildCycleCard() {
 
 buildStatsCard(UserProfile user) {
   return Consumer<UserProfile>(builder: (context, user, child) {
-    LiftHelper helper = LiftHelper(user.db);
+    LiftHelper helper = LiftHelper();
     return FutureBuilder(
         future: helper.getHighest1RMs(user.currentExercise.id),
         builder: (BuildContext context, AsyncSnapshot<List<DbLift>> snapshot) {

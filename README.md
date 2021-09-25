@@ -31,5 +31,9 @@ The features are mostly tied to my own usage / gym habits. Thus at the moment I 
 
 ### Make data shown at stats changeable
 - [x] 1RM, 
-- [ ] TM: Needs storage of TM over time --> DB, 
-- [ ] Weight --> maybe just max weight on a given day
+- [ ] TM: Needs storage of TM over time --> DB
+- [x] Weight --> maybe just max weight on a given day
+
+
+
+Only store TM when it's not == the old one

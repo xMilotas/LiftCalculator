@@ -29,7 +29,7 @@ class _StatsFullScreenState extends State<StatsFullScreen> {
 
 buildChart(UserProfile user, int liftId, String selectedStat) {
   return FutureBuilder(
-      future: dataFetcher(user, liftId),
+      future: dataFetcher(liftId),
       builder: (BuildContext context,
           AsyncSnapshot<Map<int, List<DbLift>>> snapshot) {
         Widget output;
@@ -56,9 +56,8 @@ buildChart(UserProfile user, int liftId, String selectedStat) {
 }
 
 /// Queries the data for all lifts and returns it as a Map[ID - List[Lift]]
-Future<Map<int, List<DbLift>>> dataFetcher(
-    UserProfile profile, int liftId) async {
-  LiftHelper helper = LiftHelper(profile.db);
+Future<Map<int, List<DbLift>>> dataFetcher(int liftId) async {
+  LiftHelper helper = LiftHelper();
   var stats = <int, List<DbLift>>{};
   List<DbLift> tmp = await helper.getHighestLiftsPerDay(liftId);
   stats[liftId] = tmp;

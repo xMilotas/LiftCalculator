@@ -108,7 +108,7 @@ class _StatsScreenState extends State<StatsScreen> {
 /// Queries the data for all lifts and returns it as a Map[ID - List[Lift]]
 Future<Map<int, List<DbLift>>> dataFetcher(
     UserProfile profile, String statsType) async {
-  LiftHelper helper = LiftHelper(profile.db);
+  LiftHelper helper = LiftHelper();
   var stats = <int, List<DbLift>>{};
   for (var i = 0; i < profile.liftList.length; i++) {
     int id = profile.liftList[i].id;

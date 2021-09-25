@@ -5,12 +5,3 @@ class Lift {
 
   Lift(this.id, this.title, this.abbreviation);
 }
-
-// ignore: non_constant_identifier_names
-final List<Lift> GLOBAL_ALL_LIFTS = 
-    [
-    Lift(0, "Overhead Press", "OHP"),
-    Lift(1, "Deadlift", "DL"),
-    Lift(2, "Bench Press", "BP"),
-    Lift(3, "Squat", "SQ")
-    ];
