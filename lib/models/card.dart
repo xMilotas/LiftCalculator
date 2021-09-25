@@ -25,7 +25,7 @@ class TappableCard extends StatelessWidget {
       required this.cartContent,
       required this.route});
 
-  static const height = 313.0;
+  static const height = 282.0;
 
   @override
   Widget build(BuildContext context) {
@@ -57,8 +57,6 @@ class TappableCard extends StatelessWidget {
     );
   }
 }
-
-
 
 class NonTappableCard extends StatelessWidget {
   final HomeCard cartContent;
@@ -96,10 +94,6 @@ class NonTappableCard extends StatelessWidget {
   }
 }
 
-
-
-
-
 class CardContent extends StatelessWidget {
   final HomeCard _;
   CardContent(this._);
@@ -110,47 +104,52 @@ class CardContent extends StatelessWidget {
     final titleStyle = theme.textTheme.headline5!.copyWith(color: Colors.white);
     final descriptionStyle = theme.textTheme.subtitle1;
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Stack(
       children: [
-        SizedBox(
-          height: 184,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Ink.image(
-                  image: AssetImage(_.imageName),
-                  fit: BoxFit.cover,
-                  child: Container(),
-                ),
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            SizedBox(
+              height: 184,
+              child: Stack(
+                children: [
+                  Positioned.fill(
+                    child: Ink.image(
+                      image: AssetImage(_.imageName),
+                      fit: BoxFit.cover,
+                      child: Container(),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 16,
+                    left: 16,
+                    right: 16,
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      alignment: Alignment.centerLeft,
+                      child: Text(_.contentTitle, style: titleStyle),
+                    ),
+                  ),
+                ],
               ),
-              Positioned(
-                bottom: 16,
-                left: 16,
-                right: 16,
-                child: FittedBox(
-                  fit: BoxFit.scaleDown,
-                  alignment: Alignment.centerLeft,
-                  child: Text(_.contentTitle, style: titleStyle),
-                ),
-              ),
-            ],
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
-          child: DefaultTextStyle(
-            softWrap: false,
-            overflow: TextOverflow.ellipsis,
-            style: descriptionStyle!,
-            child: Row(
-              children: [_.content],
             ),
-          ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
+              child: DefaultTextStyle(
+                softWrap: false,
+                overflow: TextOverflow.ellipsis,
+                style: descriptionStyle!,
+                child: Row(
+                  children: [_.content],
+                ),
+              ),
+            ),
+          ],
         ),
         if (_.changeable)
-          Align(
-            alignment: Alignment.bottomRight,
+          Positioned(
+            right: 1,
+            bottom: 1,
             child: IconButton(
                 icon: Icon(Icons.change_circle),
                 color: Colors.white,
@@ -170,7 +169,7 @@ class CardContent extends StatelessWidget {
                         ],
                       );
                     })),
-          )
+          ),
       ],
     );
   }
@@ -186,17 +185,20 @@ Widget changeTrainingDialog(BuildContext context, StateSetter setState) {
       title: !isCompleted
           ? Text(e.title)
           : Text(e.title,
-              style: TextStyle(decoration: TextDecoration.lineThrough, decorationThickness: 2.85, color: Colors.grey)),
+              style: TextStyle(
+                  decoration: TextDecoration.lineThrough,
+                  decorationThickness: 2.85,
+                  color: Colors.grey)),
       value: e.abbreviation,
       groupValue: _trainingOption,
       onChanged: (String? value) {
-        if (!isCompleted){
+        if (!isCompleted) {
           setState(() {
-          Provider.of<UserProfile>(context, listen: false)
-              .storeUserSetting('Current_Exercise', e.id);
-          _trainingOption = value;
-          Navigator.pop(context, 'Saved');
-        });
+            Provider.of<UserProfile>(context, listen: false)
+                .storeUserSetting('Current_Exercise', e.id);
+            _trainingOption = value;
+            Navigator.pop(context, 'Saved');
+          });
         }
       },
     );
