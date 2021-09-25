@@ -212,8 +212,8 @@ drawTrainingFinished(BuildContext context, UserProfile profile) => AlertDialog(
           onPressed: () {
             profile.cycleWeek.markLiftAsDone(
                               profile.currentExercise.id, profile);
-            profile.refresh();
-            Navigator.pushNamed(context, '/');
+            Navigator.pop(context);
+            Navigator.popAndPushNamed(context, '/');
           },
           child: Text('AWESOME'),
         ),

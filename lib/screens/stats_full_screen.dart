@@ -8,9 +8,10 @@ import 'package:liftcalculator/models/profile.dart';
 import 'package:liftcalculator/models/liftChart.dart';
 import 'package:provider/provider.dart';
 
-class StatsFullScreen extends StatefulWidget { 
+class StatsFullScreen extends StatefulWidget {
   final int liftId;
-  const StatsFullScreen(this.liftId);
+  final String selectedStat;
+  const StatsFullScreen(this.liftId, this.selectedStat);
   @override
   _StatsFullScreenState createState() => _StatsFullScreenState();
 }
@@ -22,15 +23,15 @@ class _StatsFullScreenState extends State<StatsFullScreen> {
     return Scaffold(
         appBar: buildAppBar(context, "Stats"),
         drawer: buildDrawer(context),
-        body: buildChart(profile, widget.liftId));
+        body: buildChart(profile, widget.liftId, widget.selectedStat));
   }
 }
 
-buildChart(UserProfile user, int liftId) {
+buildChart(UserProfile user, int liftId, String selectedStat) {
   return FutureBuilder(
       future: dataFetcher(user, liftId),
-      builder:
-          (BuildContext context, AsyncSnapshot<Map<int, List<DbLift>>> snapshot) {
+      builder: (BuildContext context,
+          AsyncSnapshot<Map<int, List<DbLift>>> snapshot) {
         Widget output;
         if (snapshot.hasData) {
           Map<int, List<DbLift>> data = snapshot.data!;
@@ -40,20 +41,23 @@ buildChart(UserProfile user, int liftId) {
             var liftSeries = new charts.Series<DbLift, DateTime>(
               id: e.key.toString(),
               domainFn: (DbLift lift, _) => lift.date,
-              measureFn: (DbLift lift, _) => lift.calculated1RM,
+              measureFn: (DbLift lift, _) => (selectedStat == '1RM') ? lift.calculated1RM : lift.weightRep.weight,
               data: e.value,
             );
-            liftCharts.add(LiftChart([liftSeries], user.liftList[e.key].title, fullscreen: true)       
-            );
+            liftCharts.add(LiftChart([liftSeries], user.liftList[e.key].title, selectedStat,
+                fullscreen: true));
           }
-          output = ListView(children: liftCharts);
-        } else output = Center(child: Column(children: [...dataFetchingIndicator()]));
+          output = Column(children: liftCharts);
+        } else
+          output =
+              Center(child: Column(children: [...dataFetchingIndicator()]));
         return output;
       });
 }
 
 /// Queries the data for all lifts and returns it as a Map[ID - List[Lift]]
-Future<Map<int, List<DbLift>>> dataFetcher(UserProfile profile, int liftId) async {
+Future<Map<int, List<DbLift>>> dataFetcher(
+    UserProfile profile, int liftId) async {
   LiftHelper helper = LiftHelper(profile.db);
   var stats = <int, List<DbLift>>{};
   List<DbLift> tmp = await helper.getHighestLiftsPerDay(liftId);
