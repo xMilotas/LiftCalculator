@@ -12,10 +12,24 @@ buildDrawer(context) => Drawer(
             },
           ),
           ListTile(
+            leading: Icon(Icons.book),
+            title: const Text('Lift Diary'),
+            onTap: () {
+              Navigator.pushNamed(context, '/diary');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.edit),
             title: const Text('Configure 1RM/TM'),
             onTap: () {
               Navigator.pushNamed(context, '/trainingConfig');
+            },
+          ),
+          ListTile(
+            leading: Icon(Icons.edit),
+            title: const Text('Configure TM'),
+            onTap: () {
+              Navigator.pushNamed(context, '/trainingMax');
             },
           ),
           ListTile(
@@ -25,13 +39,6 @@ buildDrawer(context) => Drawer(
               Navigator.pushNamed(context, '/DbDumpScreen');
             },
           ),
-          ListTile(
-            leading: Icon(Icons.edit),
-            title: const Text('Configure TM'),
-            onTap: () {
-              Navigator.pushNamed(context, '/trainingMax');
-            },
-          )
         ],
       ),
     );

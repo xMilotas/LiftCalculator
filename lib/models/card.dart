@@ -60,8 +60,9 @@ class TappableCard extends StatelessWidget {
 
 class NonTappableCard extends StatelessWidget {
   final HomeCard cartContent;
+  final double customHeight;
 
-  NonTappableCard({required this.cartContent});
+  NonTappableCard({required this.cartContent, this.customHeight = 0});
 
   static const height = 355.0;
 
@@ -75,7 +76,7 @@ class NonTappableCard extends StatelessWidget {
         child: Column(
           children: [
             SizedBox(
-              height: height,
+              height: (customHeight != 0) ? customHeight : height,
               child: Card(
                 clipBehavior: Clip.antiAlias,
                 child: InkWell(
@@ -110,7 +111,7 @@ class CardContent extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             SizedBox(
-              height: 184,
+              height: 175,
               child: Stack(
                 children: [
                   Positioned.fill(

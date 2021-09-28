@@ -41,7 +41,6 @@ class DbLift {
 }
 
 class LiftHelper {
-
   /// Finds the top 3 lifts with the highest 1RM for the corresponding lift type.
   Future<List<DbLift>> getHighest1RMs(int id) async {
     List<Map> lifts = await GLOBAL_DB!.query('Lift',
@@ -54,7 +53,8 @@ class LiftHelper {
 
   /// Gets all performed lifts for this lift type
   Future<List<DbLift>> getAllLifts(int id) async {
-    List<Map> lifts = await GLOBAL_DB!.query('Lift', where: 'id = ?', whereArgs: [id]);
+    List<Map> lifts =
+        await GLOBAL_DB!.query('Lift', where: 'id = ?', whereArgs: [id]);
     return List.generate(lifts.length, (i) => DbLift.fromMap(lifts[i]));
   }
 
@@ -65,8 +65,7 @@ class LiftHelper {
     return List.generate(lifts.length, (i) => DbLift.fromMap(lifts[i]));
   }
 
-
-    /// Gets only the biggest lift per day for a lift type
+  /// Gets only the biggest lift per day for a lift type
   getHighestWeightPerDay(int id) async {
     List<Map> lifts = await GLOBAL_DB!.rawQuery(
         'SELECT a.calculated1RM, a.date, a.id, a.weight, a.reps FROM lift a INNER JOIN(SELECT MAX(weight) as weight, date, id FROM lift WHERE ID = $id GROUP BY id, date) b ON a.id = b.id and a.weight = b.weight');
@@ -82,5 +81,14 @@ class LiftHelper {
       result[e['id']] = e['calculated1RM'];
     });
     return result;
+  }
+
+  /// Gets lifts per day
+  Future<List<DbLift>> getLiftsPerDay(DateTime date) async {
+    print(date);
+    List<Map> lifts = await GLOBAL_DB!.query('Lift',
+        where: 'date = ?', whereArgs: [date.millisecondsSinceEpoch]);
+    print(lifts);
+    return List.generate(lifts.length, (i) => DbLift.fromMap(lifts[i]));
   }
 }
