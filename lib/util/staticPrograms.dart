@@ -40,7 +40,7 @@ final fslWeekThree = LiftDay(
   coreLifts: [
     LiftNumber(75, 5),
     LiftNumber(85, 3),
-    LiftNumber(85, 1, pr: true)
+    LiftNumber(95, 1, pr: true)
   ],
-  cycleLift: [LiftNumber(65, 15, sets: 1, pr: true)],
+  cycleLift: [LiftNumber(75, 15, sets: 1, pr: true)],
 );
