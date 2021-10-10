@@ -14,7 +14,8 @@ class StatsPerDayScreen extends StatefulWidget {
 }
 
 class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
-  DateTime _selectedDate = new DateTime(DateTime.now().year, DateTime.now().month, DateTime.now().day);
+  DateTime _selectedDate = new DateTime(
+      DateTime.now().year, DateTime.now().month, DateTime.now().day);
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,23 +24,29 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
       body: ListView(
         children: [
           Center(
-              child: ButtonBar(mainAxisSize: MainAxisSize.min, 
-              children: [  
+              child: ButtonBar(mainAxisSize: MainAxisSize.min, children: [
             IconButton(
                 onPressed: () => setState(() {
                       _selectedDate = _selectedDate.subtract(Duration(days: 1));
                     }),
                 icon: Icon(Icons.arrow_left)),
             TextButton(
-                onPressed: selectDate,
-                child: Text(DateFormat('yyyy-MM-dd').format(_selectedDate), style: Theme.of(context).textTheme.headline5,),),
+              onPressed: selectDate,
+              child: Text(
+                DateFormat('yyyy-MM-dd').format(_selectedDate),
+                style: Theme.of(context).textTheme.headline5,
+              ),
+            ),
             IconButton(
                 onPressed: () => setState(() {
                       _selectedDate = _selectedDate.add(Duration(days: 1));
                     }),
                 icon: Icon(Icons.arrow_right)),
           ])),
-          Divider(height: 0, thickness: 2.5,),
+          Divider(
+            height: 0,
+            thickness: 2.5,
+          ),
           buildDiary(_selectedDate)
         ],
       ),
@@ -66,13 +73,13 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
                         ],
                       ))
                   .toList();
+              print('length ${stats.length}');
               output = NonTappableCard(
                   cartContent: HomeCard(
                       performedLift.title,
                       Column(children: stats),
                       'graphics/${performedLift.abbreviation}.png'),
-                  customHeight: 400
-                );
+                  customHeight: 250 + (stats.length * 16));
             }
           } else
             output =
