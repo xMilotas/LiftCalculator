@@ -83,6 +83,21 @@ class LiftHelper {
     return result;
   }
 
+  /// Update specific lift
+  updateLift(DbLift originalLift, String newReps, String newWeight) async {
+    DbLift newLift = DbLift(originalLift.id, originalLift.date,
+        WeightReps(double.parse(newWeight), int.parse(newReps)));
+    // We don't have unique identifiers for our rows, thus we need to pass the entire original element
+    await GLOBAL_DB!.update('Lift', newLift.toMap(),
+        where: 'id = ? AND date = ? AND weight = ? AND reps = ?',
+        whereArgs: [
+          originalLift.id,
+          originalLift.date.millisecondsSinceEpoch,
+          originalLift.weightRep.weight,
+          originalLift.weightRep.reps
+        ]);
+  }
+
   /// Gets lifts per day
   Future<List<DbLift>> getLiftsPerDay(DateTime date) async {
     print(date);

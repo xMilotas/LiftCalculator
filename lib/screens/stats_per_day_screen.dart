@@ -6,6 +6,7 @@ import 'package:liftcalculator/models/databaseLoadIndicator.dart';
 import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/lift.dart';
+import 'package:liftcalculator/screens/edit_lifts_screen.dart';
 import 'package:liftcalculator/util/globals.dart';
 
 class StatsPerDayScreen extends StatefulWidget {
@@ -47,7 +48,7 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
             height: 0,
             thickness: 2.5,
           ),
-          buildDiary(_selectedDate)
+          buildDiary(_selectedDate),
         ],
       ),
     );
@@ -73,13 +74,32 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
                         ],
                       ))
                   .toList();
-              print('length ${stats.length}');
-              output = NonTappableCard(
-                  cartContent: HomeCard(
-                      performedLift.title,
-                      Column(children: stats),
-                      'graphics/${performedLift.abbreviation}.png'),
-                  customHeight: 250 + (stats.length * 16));
+              output = Stack(
+                children: [
+                  NonTappableCard(
+                      cartContent: HomeCard(
+                          performedLift.title,
+                          Column(children: stats),
+                          'graphics/${performedLift.abbreviation}.png'),
+                      customHeight: 250 + (stats.length * 16)
+                  ),
+                  Positioned(
+                    right: 20,
+                    bottom: 24,
+                    child: IconButton(
+                        icon: Icon(Icons.edit),
+                        color: Colors.white,
+                        onPressed: () => (
+                              Navigator.of(context).push(
+                                    MaterialPageRoute(
+                                        builder: (context) => EditLiftsScreen(data)
+                                    ),
+                              )
+                            )
+                        ),
+                  ),
+                ],
+              );
             }
           } else
             output =
