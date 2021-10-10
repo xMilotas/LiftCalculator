@@ -1,11 +1,13 @@
-// TODO: Implement
-
-
+// User can input custom exercise (name) with sets,reps & (optional weight)
+// Needs to be mapped to a core exercise
 class AssistanceLift {
-  // This depends on the lift im performing
-  final String name;
-  final String reps;
+  final String exerciseName;
+  final int relatedCoreExerciseId;
+  int sets;
+  int reps;
+  int weight;
 
-  AssistanceLift(this.name, this.reps);
+  AssistanceLift(this.exerciseName, this.relatedCoreExerciseId, this.sets, this.reps, {this.weight = 0});
 }
 
+// Storage? 

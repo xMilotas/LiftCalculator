@@ -19,6 +19,13 @@ buildDrawer(context) => Drawer(
             },
           ),
           ListTile(
+            leading: Icon(Icons.assignment_sharp),
+            title: const Text('Configure assistance'),
+            onTap: () {
+              Navigator.pushNamed(context, '/assistanceEditor');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.edit),
             title: const Text('Configure 1RM/TM'),
             onTap: () {
