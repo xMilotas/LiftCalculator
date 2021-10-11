@@ -5,7 +5,6 @@ import 'package:liftcalculator/models/databaseLoadIndicator.dart';
 import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/lift.dart';
-import 'package:liftcalculator/models/profile.dart';
 import 'package:provider/provider.dart';
 
 

@@ -5,6 +5,7 @@ import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/profile.dart';
 
 import 'package:liftcalculator/models/training.dart';
+import 'package:liftcalculator/util/globals.dart';
 import 'package:liftcalculator/util/programs.dart';
 import 'package:liftcalculator/util/weight_reps.dart';
 import 'package:provider/provider.dart';
@@ -177,7 +178,7 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                                 today
                                     .day), // only store the current day, not time
                             WeightReps(weightReps.weight, reps));
-                        writeToDB(profile, _tempLift);
+                        writeToDB(_tempLift);
                         // Increase counter of exercise --
                         updateExercise(exerciseToDo.sets);
                         // If we have a next exercise then redraw the screen with the next one, if not move to home screen
@@ -220,8 +221,8 @@ drawTrainingFinished(BuildContext context, UserProfile profile) => AlertDialog(
       ],
     );
 
-writeToDB(UserProfile profile, DbLift lift) async {
+writeToDB(DbLift lift) async {
   print("[EXERCISE]: Saving to DB $lift");
-  await profile.db.insert('lift', lift.toMap(),
+  await GLOBAL_DB!.insert('lift', lift.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace);
 }

@@ -33,9 +33,12 @@ class DatabaseClient {
             )""");
 
     await db.execute("""
-            CREATE TABLE training (
-              id INTEGER PRIMARY KEY,
-              lift TEXT NOT NULL
+            CREATE TABLE assistance (
+              exerciseName TEXT NOT NULL,
+              relatedCoreExerciseId INTEGER NOT NULL,
+              sets INTEGER NOT NULL,
+              reps INTEGER NOT NULL,
+              weight DOUBLE NOT NULL
             )""");
 
     await db.execute("""

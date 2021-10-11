@@ -24,8 +24,6 @@ class _StatsPerDayScreenState extends State<EditLiftsScreen> {
   var controllers = <DbLift, LiftEditor>{};
   @override
   Widget build(BuildContext context) {
-    var initialValues = widget.selectedLift;
-
     for (var lift in widget.selectedLift) {
       controllers[lift] = LiftEditor(
           TextEditingController(text: lift.weightRep.reps.toString()),

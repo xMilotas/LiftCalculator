@@ -8,7 +8,7 @@ class TrainingMax {
   final int id;
   final String title;
   final String abbreviation;
-  IconData? icon; //TODO: Add some nice icons here
+  IconData? icon;
   late bool isExpanded;
   late int weight;
   late int reps;
