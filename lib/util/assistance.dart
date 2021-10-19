@@ -37,7 +37,7 @@ class AssistanceExercise {
     if (weight == 0)
       return '$exerciseName: $sets x $reps';
     else
-      return '$exerciseName: $sets x $reps @ $weight';
+      return '$exerciseName: $sets x $reps @ $weight kg';
   }
 }
 
@@ -49,6 +49,14 @@ class AssistanceLiftHelper {
         where: 'relatedCoreExerciseId = ?', whereArgs: [relatedCoreExerciseId]);
     return List.generate(assistanceExercises.length,
         (i) => AssistanceExercise.fromMap(assistanceExercises[i]));
+  }
+
+  /// Deletes all assistance exercises for a core lift
+  deleteAllExercisesForCoreLift(int relatedCoreExerciseId) async {
+    await GLOBAL_DB!
+        .delete('assistance', where: 'relatedCoreExerciseId = ?', whereArgs: [
+      relatedCoreExerciseId,
+    ]);
   }
 
   writeToDB(AssistanceExercise exercise) async {

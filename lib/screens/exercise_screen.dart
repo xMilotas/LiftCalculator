@@ -24,9 +24,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   bool cycleDone = false;
 
   int currentCycleExercise = -1;
-  int currentAssistantExercise = -1;
-
-  // TODO: Assistance..
 
   // Counter is modifiable outside of context but default value should be set by provider
 
@@ -60,8 +57,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     });
   }
 
-  LiftNumber getCurrentExercise(LiftDay week) {
-    if (currentCoreExercise < 3)
+  /// Gets the percentages for the current week/exercise
+  LiftNumber getCurrentExercise(LiftDay week, int exerciseId) {
+    if (!coreDone)
       return week.coreLifts[currentCoreExercise];
     else
       return week.cycleLift[0];
@@ -71,17 +69,25 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     var profile = Provider.of<UserProfile>(context, listen: false);
+    // Get percentages for this exercise
     LiftDay week = getCurrentWeek(profile);
-    LiftNumber exerciseToDo = getCurrentExercise(week);
+    LiftNumber exerciseToDo =
+        getCurrentExercise(week, profile.currentExercise.id);
+
+    // Perform calculations
     WeightReps weightReps = WeightReps(
         profile.currentExercise.trainingMax *
             exerciseToDo.weightPercentage /
             100,
         exerciseToDo.reps);
     if (reps == -1) reps = weightReps.reps;
-    int calculated1RM = ((weightReps.weight * reps * 0.0333) + weightReps.weight).round();
+    int calculated1RM =
+        ((weightReps.weight * reps * 0.0333) + weightReps.weight).round();
     int maxCalculated1RM = profile.max1RMs[profile.currentExercise.id]!;
-    int repsForNew1RM = ((maxCalculated1RM - weightReps.weight) / weightReps.weight * 30.03003).round();
+    int repsForNew1RM =
+        ((maxCalculated1RM - weightReps.weight) / weightReps.weight * 30.03003)
+            .round();
+
     return Scaffold(
       appBar: buildAppBar(context, profile.currentExercise.title),
       body: Center(
@@ -181,14 +187,9 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
                         writeToDB(_tempLift);
                         // Increase counter of exercise --
                         updateExercise(exerciseToDo.sets);
-                        // If we have a next exercise then redraw the screen with the next one, if not move to home screen
+                        // If we have a next exercise then redraw the screen with the next one, if not move to assistance screen
                         if (cycleDone && coreDone) {
-                          // Draw overlay
-                          showDialog(
-                              barrierDismissible: false,
-                              context: context,
-                              builder: (context) =>
-                                  drawTrainingFinished(context, profile));
+                          Navigator.popAndPushNamed(context, '/assistance');
                         }
                       }
                     },
@@ -204,22 +205,6 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
     );
   }
 }
-
-drawTrainingFinished(BuildContext context, UserProfile profile) => AlertDialog(
-      title: Text('Session done'),
-      content: Text('Well done - Time to rest'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            profile.cycleWeek.markLiftAsDone(
-                              profile.currentExercise.id, profile);
-            Navigator.pop(context);
-            Navigator.popAndPushNamed(context, '/');
-          },
-          child: Text('AWESOME'),
-        ),
-      ],
-    );
 
 writeToDB(DbLift lift) async {
   print("[EXERCISE]: Saving to DB $lift");

@@ -4,6 +4,7 @@ import 'package:liftcalculator/models/changeLiftDialog.dart';
 import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/selectedLift.dart';
 import 'package:liftcalculator/screens/assistance_editor_screen.dart';
+import 'package:liftcalculator/screens/assistance_screen.dart';
 import 'package:liftcalculator/screens/cycle_overview_screen.dart';
 import 'package:liftcalculator/screens/db_dump_screen.dart';
 import 'package:liftcalculator/screens/exercise_screen.dart';
@@ -60,6 +61,7 @@ class MyApp extends StatelessWidget {
         '/cycleOverview': (context) => CycleOverviewScreen(),
         '/diary': (context) => StatsPerDayScreen(),
         '/assistanceEditor': (context) => AssistanceEditorScreen(),
+        '/assistance': (context) => AssistanceScreen(),
       },
     );
   }
