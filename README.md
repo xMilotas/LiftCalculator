@@ -15,6 +15,7 @@ The features are mostly tied to my own usage / gym habits. Thus at the moment I 
 
 This app is capable of:
 - calculating the correct schedule based on your current week in the corresponding cycle
+- handling custom assistance exercises - add whatever suits your needs
 - automatically increasing the Training Max after a cycle is over
 - calculating the number of reps needed to perform a new PR on PR-sets
 - tracking all lifts performed in a database
@@ -24,12 +25,8 @@ This app is capable of:
 
 
 ### Dev-Notes
--  🐛 Fix navigation 
 -  🐛 Add TrainingMax to Lift class instead of separate table
--  ✨ Add assistance class + templates - should be tied to current exercise
--  ✨ Add assistance to exercise
--  ✨ Highlight trained days on date picker
--  ✨ Add intro screen on initial startup -- walk trough and TM input screen
+-  ✨ Add intro screen on initial startup 
 
 
 

@@ -25,7 +25,7 @@ class TappableCard extends StatelessWidget {
       required this.cartContent,
       required this.route});
 
-  static const height = 282.0;
+  static const height = 290.0;
 
   @override
   Widget build(BuildContext context) {

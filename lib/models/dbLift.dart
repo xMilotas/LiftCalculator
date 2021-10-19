@@ -1,7 +1,6 @@
 import 'dart:async';
 import 'package:liftcalculator/util/globals.dart';
 import 'package:liftcalculator/util/weight_reps.dart';
-import 'package:sqflite/sqflite.dart';
 
 // Base Lift class
 

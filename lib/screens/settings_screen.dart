@@ -149,7 +149,7 @@ ListTile generateSampleData(BuildContext context, UserProfile profile) {
                 liftId,
                 DateTime(2021, 7, liftId + 2).add(Duration(days: 9 + lift)),
                 WeightReps(random.nextInt(80) + 30, random.nextInt(10) + 1));
-            writeToDB(profile, _tempLift);
+            writeToDB(_tempLift);
           }
         }
       });
