@@ -9,6 +9,8 @@ import 'package:liftcalculator/models/lift.dart';
 import 'package:liftcalculator/screens/edit_lifts_screen.dart';
 import 'package:liftcalculator/util/globals.dart';
 
+import 'add_custom_lift_screen.dart';
+
 class StatsPerDayScreen extends StatefulWidget {
   @override
   _StatsPerDayScreenState createState() => _StatsPerDayScreenState();
@@ -20,8 +22,7 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, "Lift Diary"),
-      drawer: buildDrawer(context),
+      appBar: buildAppBar(context, setState, "Lift Diary"),
       body: ListView(
         children: [
           Center(
@@ -62,7 +63,14 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
           if (snapshot.hasData) {
             List<DbLift> data = snapshot.data!;
             if (data.length == 0)
-              output = Text('You have not performed any lifts on this day');
+              output = Column(children: [
+                Text('You have not performed any lifts on this day'),
+                IconButton(
+                      color: Colors.white,
+                      icon: Icon(Icons.add),
+                      onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (context) => AddCustomLiftsScreen(_selectedDate))).then((_) => setState(() {})),
+                )
+              ]);
             else {
               // Assume we only perform 1 lift p. selected day
               Lift performedLift = GLOBAL_ALL_LIFTS[data[0].id];
@@ -81,22 +89,17 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
                           performedLift.title,
                           Column(children: stats),
                           'graphics/${performedLift.abbreviation}.png'),
-                      customHeight: 250 + (stats.length * 16)
-                  ),
+                      customHeight: 250 + (stats.length * 16)),
                   Positioned(
                     right: 20,
                     bottom: 24,
                     child: IconButton(
                         icon: Icon(Icons.edit),
                         color: Colors.white,
-                        onPressed: () => (
-                              Navigator.of(context).push(
-                                    MaterialPageRoute(
-                                        builder: (context) => EditLiftsScreen(data)
-                                    ),
-                              )
-                            )
-                        ),
+                        onPressed: () => (Navigator.of(context).push(
+                              MaterialPageRoute(
+                                  builder: (context) => EditLiftsScreen(data)),
+                            ))),
                   ),
                 ],
               );

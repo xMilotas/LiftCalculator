@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:liftcalculator/screens/settings_screen.dart';
 
-buildAppBar(context, [String? title]){
+buildAppBar(context, StateSetter setState, [String? title]){
 String appBarTitle = 'Lift Calculator';
 if(title != null) appBarTitle = title;
 
@@ -15,8 +15,8 @@ return AppBar(
             onPressed: () {
               Navigator.of(context).push(
                   MaterialPageRoute(builder: (context) => SettingsScreen()
-                  ),
-                );
+                  )
+                ).then((_) => setState(() {}));
             },
           ),
       ],

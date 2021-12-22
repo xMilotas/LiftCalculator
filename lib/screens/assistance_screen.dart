@@ -67,7 +67,7 @@ class _AssistanceScreenState extends State<AssistanceScreen> {
       AssistanceExercise exercise = snapshot.data![currentAssistanceNumber];
       if (reps == -1) reps = exercise.reps;
       return Scaffold(
-        appBar: buildAppBar(context, exercise.exerciseName),
+        appBar: buildAppBar(context, setState, exercise.exerciseName),
         body: Center(
           child: Column(
               children: buildExerciseScreenArea(
@@ -85,7 +85,7 @@ class _AssistanceScreenState extends State<AssistanceScreen> {
       );
     } else
       return Scaffold(
-          appBar: buildAppBar(context, 'Assistance'),
+          appBar: buildAppBar(context, setState, 'Assistance'),
           body: Center(
             child: Column(children: dataFetchingIndicator()),
           ),

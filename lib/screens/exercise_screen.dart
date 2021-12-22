@@ -89,117 +89,135 @@ class _ExerciseScreenState extends State<ExerciseScreen> {
             .round();
 
     return Scaffold(
-      appBar: buildAppBar(context, profile.currentExercise.title),
-      body: Center(
-        child: Column(
-          children: [
-            Spacer(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                if (exerciseToDo.pr)
-                  RichText(
-                    text: TextSpan(
-                        text: reps.toString(),
+      appBar: buildAppBar(context, setState, profile.currentExercise.title),
+      body: Stack(
+        children: [
+          Positioned(
+            top: 0,
+            right: 0,
+            child: IconButton(
+                icon: Icon(Icons.exit_to_app),
+                onPressed: () => {
+                  // Open view to ask if user is sure
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) =>
+                          drawEndTrainingPopup(context, profile))
+                }),
+          ),
+          Center(
+          child: Column(
+            children: [
+              Spacer(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  if (exerciseToDo.pr)
+                    RichText(
+                      text: TextSpan(
+                          text: reps.toString(),
+                          style:
+                              theme.textTheme.headline1!.copyWith(fontSize: 160),
+                          children: [
+                            WidgetSpan(
+                                child: Transform.translate(
+                              offset: Offset(10.0, -40.0),
+                              child: Text(
+                                "+",
+                                style: theme.textTheme.headline2,
+                              ),
+                            ))
+                          ]),
+                    )
+                  else
+                    Text(reps.toString(),
                         style:
-                            theme.textTheme.headline1!.copyWith(fontSize: 160),
-                        children: [
-                          WidgetSpan(
-                              child: Transform.translate(
-                            offset: Offset(10.0, -40.0),
-                            child: Text(
-                              "+",
-                              style: theme.textTheme.headline2,
-                            ),
-                          ))
-                        ]),
-                  )
-                else
-                  Text(reps.toString(),
-                      style:
-                          theme.textTheme.headline1!.copyWith(fontSize: 160)),
-                if (exerciseToDo.sets > 1)
-                  Text(
-                      currentCycleExercise.toString() +
-                          '/' +
-                          exerciseToDo.sets.toString(),
-                      style: theme.textTheme.headline4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    IconButton(
-                        icon: Icon(Icons.add, size: 32),
-                        color: Colors.white,
-                        onPressed: increase),
-                    IconButton(
-                        icon: Icon(Icons.remove, size: 32),
-                        color: Colors.white,
-                        onPressed: decrease)
-                  ],
-                ),
-                Divider(
-                  thickness: 4,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text(weightReps.weight.toString(),
-                      style: theme.textTheme.headline3),
-                ),
-                Divider(
-                  thickness: 4,
-                ),
-                Padding(
-                  padding: EdgeInsets.only(top: 10, bottom: 10),
-                  child: Text('Calculated 1RM: $calculated1RM kg',
-                      style: theme.textTheme.headline3!.copyWith(fontSize: 16)),
-                ),
-                if (exerciseToDo.pr)
+                            theme.textTheme.headline1!.copyWith(fontSize: 160)),
+                  if (exerciseToDo.sets > 1)
+                    Text(
+                        currentCycleExercise.toString() +
+                            '/' +
+                            exerciseToDo.sets.toString(),
+                        style: theme.textTheme.headline4),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      IconButton(
+                          icon: Icon(Icons.add, size: 32),
+                          color: Colors.white,
+                          onPressed: increase),
+                      IconButton(
+                          icon: Icon(Icons.remove, size: 32),
+                          color: Colors.white,
+                          onPressed: decrease)
+                    ],
+                  ),
+                  Divider(
+                    thickness: 4,
+                  ),
                   Padding(
                     padding: EdgeInsets.only(top: 10, bottom: 10),
-                    child: Text('Perform $repsForNew1RM+ reps for a new PR',
-                        style:
-                            theme.textTheme.headline3!.copyWith(fontSize: 16)),
+                    child: Text(weightReps.weight.toString(),
+                        style: theme.textTheme.headline3),
                   ),
-              ],
-            ),
-            Spacer(),
-            Column(
-              mainAxisAlignment: MainAxisAlignment.end,
-              children: [
-                Container(
-                  margin: const EdgeInsets.only(bottom: 8),
-                  child: OutlinedButton(
-                    style: OutlinedButton.styleFrom(
-                        textStyle: TextStyle(fontSize: 20)),
-                    onPressed: () {
-                      // Prevent accidental presses by checking if current exercise is done already
-                      if (!profile.cycleWeek
-                          .getLiftStatus(profile.currentExercise.id)) {
-                        DateTime today = DateTime.now();
-                        DbLift _tempLift = DbLift(
-                            profile.currentExercise.id,
-                            DateTime(
-                                today.year,
-                                today.month,
-                                today
-                                    .day), // only store the current day, not time
-                            WeightReps(weightReps.weight, reps));
-                        writeToDB(_tempLift);
-                        // Increase counter of exercise --
-                        updateExercise(exerciseToDo.sets);
-                        // If we have a next exercise then redraw the screen with the next one, if not move to assistance screen
-                        if (cycleDone && coreDone) {
-                          Navigator.popAndPushNamed(context, '/assistance');
+                  Divider(
+                    thickness: 4,
+                  ),
+                  Padding(
+                    padding: EdgeInsets.only(top: 10, bottom: 10),
+                    child: Text('Calculated 1RM: $calculated1RM kg',
+                        style: theme.textTheme.headline3!.copyWith(fontSize: 16)),
+                  ),
+                  if (exerciseToDo.pr)
+                    Padding(
+                      padding: EdgeInsets.only(top: 10, bottom: 10),
+                      child: Text('Perform $repsForNew1RM+ reps for a new PR',
+                          style:
+                              theme.textTheme.headline3!.copyWith(fontSize: 16)),
+                    ),
+                ],
+              ),
+              Spacer(),
+              Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Container(
+                    margin: const EdgeInsets.only(bottom: 8),
+                    child: OutlinedButton(
+                      style: OutlinedButton.styleFrom(
+                          textStyle: TextStyle(fontSize: 20)),
+                      onPressed: () {
+                        // Prevent accidental presses by checking if current exercise is done already
+                        if (!profile.cycleWeek
+                            .getLiftStatus(profile.currentExercise.id)) {
+                          DateTime today = DateTime.now();
+                          DbLift _tempLift = DbLift(
+                              profile.currentExercise.id,
+                              DateTime(
+                                  today.year,
+                                  today.month,
+                                  today
+                                      .day), // only store the current day, not time
+                              WeightReps(weightReps.weight, reps));
+                          writeToDB(_tempLift);
+                          // Increase counter of exercise --
+                          updateExercise(exerciseToDo.sets);
+                          // If we have a next exercise then redraw the screen with the next one, if not move to assistance screen
+                          if (cycleDone && coreDone) {
+                            Navigator.popAndPushNamed(context, '/assistance');
+                          }
                         }
-                      }
-                    },
-                    child: Text("DONE"),
+                      },
+                      child: Text("DONE"),
+                    ),
                   ),
-                ),
-              ],
-            )
-          ],
+                ],
+              )
+            ],
+          ),
         ),
+        ]
       ),
       drawer: buildDrawer(context),
     );
@@ -210,4 +228,35 @@ writeToDB(DbLift lift) async {
   print("[EXERCISE]: Saving to DB $lift");
   await GLOBAL_DB!.insert('lift', lift.toMap(),
       conflictAlgorithm: ConflictAlgorithm.replace);
+}
+
+drawEndTrainingPopup(BuildContext context, UserProfile profile){
+     return AlertDialog(
+        title: Text('End Training'),
+        content: Text('Are you sure that you want to end this session?'),
+        actions: [
+          TextButton(
+            onPressed: () {
+              profile.cycleWeek
+                  .markLiftAsDone(profile.currentExercise.id, profile);
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/');
+            },
+            child: Text('Yes, mark this training as completed'),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+              Navigator.popAndPushNamed(context, '/');
+            },
+            child: Text("Yes, but don't mark this training as completed"),
+          ),
+          TextButton(
+            onPressed: () {
+              Navigator.pop(context);
+            },
+            child: Text('No, close this window'),
+          ),
+        ],
+      );
 }

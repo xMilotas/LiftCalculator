@@ -18,8 +18,7 @@ class _TrainingMaxScreenState extends State<TrainingMaxScreen> {
     var tms = <int, double>{};
     var profile = Provider.of<UserProfile>(context);
     return Scaffold(
-      appBar: buildAppBar(context, "Training Max Overview"),
-      drawer: buildDrawer(context),
+      appBar: buildAppBar(context, setState, "Training Max Overview"),
       body: SingleChildScrollView(
         child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
           ...profile.liftList

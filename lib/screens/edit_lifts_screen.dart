@@ -30,7 +30,7 @@ class _StatsPerDayScreenState extends State<EditLiftsScreen> {
           TextEditingController(text: lift.weightRep.weight.toString()));
     }
     return Scaffold(
-      appBar: buildAppBar(context, "Edit ${widget.selectedLift[0].date}"),
+      appBar: buildAppBar(context, setState, "Edit ${widget.selectedLift[0].date}"),
       drawer: buildDrawer(context),
       body: ListView(children: [
         ...widget.selectedLift

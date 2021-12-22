@@ -21,7 +21,7 @@ class _CycleOverviewScreenState extends State<CycleOverviewScreen> {
   Widget build(BuildContext context) {
     var profile = Provider.of<UserProfile>(context);
     return Scaffold(
-        appBar: buildAppBar(context, "${profile.cycleTemplate} Overview"),
+        appBar: buildAppBar(context, setState, "${profile.cycleTemplate} Overview"),
         drawer: buildDrawer(context),
         body: ListView(
           children: GLOBAL_ALL_LIFTS
