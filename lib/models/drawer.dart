@@ -26,6 +26,13 @@ buildDrawer(context) => Drawer(
             },
           ),
           ListTile(
+            leading: Icon(Icons.stacked_bar_chart_sharp),
+            title: const Text('Stats'),
+            onTap: () {
+              Navigator.pushNamed(context, '/stats');
+            },
+          ),
+          ListTile(
             leading: Icon(Icons.edit),
             title: const Text('Configure 1RM/TM'),
             onTap: () {

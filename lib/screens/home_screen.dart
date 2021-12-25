@@ -24,7 +24,7 @@ class _HomeScreenState extends State<HomeScreen> {
       return Splash();
     } else
       return Scaffold(
-        appBar: buildAppBar(context),
+        appBar: buildAppBar(context, setState),
         body: Scrollbar(
           child: ListView(
             padding: const EdgeInsets.only(top: 8, left: 8, right: 8),
@@ -97,7 +97,7 @@ buildStatsCard(UserProfile user) {
                     children: output,
                   ),
                   'graphics/stats.png'),
-              route: '/stats');
+              route: '/statsAsText');
         });
   });
 }

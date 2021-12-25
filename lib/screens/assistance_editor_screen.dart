@@ -25,8 +25,7 @@ class _StatsPerDayScreenState extends State<AssistanceEditorScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: buildAppBar(context, "Assistance Overview"),
-      drawer: buildDrawer(context),
+      appBar: buildAppBar(context, setState, "Assistance Overview"),
       floatingActionButton: FloatingActionButton(
         child: const Icon(Icons.add),
         onPressed: () => showDialog(

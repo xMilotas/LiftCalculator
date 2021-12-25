@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/databaseLoadIndicator.dart';
@@ -36,7 +37,7 @@ class _AssistanceScreenState extends State<AssistanceScreen> {
       currentSet++;
       if (sets == currentSet) {
         // End reached?
-        if (totalExercises == currentAssistanceNumber+1) {
+        if (totalExercises == currentAssistanceNumber + 1) {
           assistanceDone = true;
         } else {
           // Go to next assistance exercise
@@ -64,28 +65,42 @@ class _AssistanceScreenState extends State<AssistanceScreen> {
   buildOutput(BuildContext context,
       AsyncSnapshot<List<AssistanceExercise>> snapshot, UserProfile profile) {
     if (snapshot.hasData) {
-      AssistanceExercise exercise = snapshot.data![currentAssistanceNumber];
-      if (reps == -1) reps = exercise.reps;
-      return Scaffold(
-        appBar: buildAppBar(context, exercise.exerciseName),
-        body: Center(
-          child: Column(
-              children: buildExerciseScreenArea(
-                  context,
-                  reps,
-                  exercise.sets,
-                  currentSet,
-                  exercise.weight,
-                  snapshot.data!.length,
-                  profile,
-                  increase,
-                  decrease)),
-        ),
-        drawer: buildDrawer(context),
-      );
+      if (snapshot.data!.length == 0) {
+          Timer.run(() {
+            showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (context) =>
+                          drawTrainingFinished(context, profile));
+          });
+        return Scaffold(
+          appBar: buildAppBar(context, setState),
+          drawer: buildDrawer(context),
+        );
+      } else {
+        AssistanceExercise exercise = snapshot.data![currentAssistanceNumber];
+        if (reps == -1) reps = exercise.reps;
+        return Scaffold(
+          appBar: buildAppBar(context, setState, exercise.exerciseName),
+          body: Center(
+            child: Column(
+                children: buildExerciseScreenArea(
+                    context,
+                    reps,
+                    exercise.sets,
+                    currentSet,
+                    exercise.weight,
+                    snapshot.data!.length,
+                    profile,
+                    increase,
+                    decrease)),
+          ),
+          drawer: buildDrawer(context),
+        );
+      }
     } else
       return Scaffold(
-          appBar: buildAppBar(context, 'Assistance'),
+          appBar: buildAppBar(context, setState, 'Assistance'),
           body: Center(
             child: Column(children: dataFetchingIndicator()),
           ),

@@ -21,7 +21,7 @@ class _DbDumpScreenState extends State<DbDumpScreen> {
     Lift currentExercise =
         Provider.of<LiftSelector>(context).currentExercise;
     return Scaffold(
-      appBar: buildAppBar(context, currentExercise.title),
+      appBar: buildAppBar(context, setState, currentExercise.title),
       body: Scrollbar(
         child: FutureBuilder(
             future: getDBDump(currentExercise),

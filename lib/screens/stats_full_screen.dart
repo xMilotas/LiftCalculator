@@ -22,7 +22,7 @@ class _StatsFullScreenState extends State<StatsFullScreen> {
   Widget build(BuildContext context) {
     var profile = Provider.of<UserProfile>(context);
     return Scaffold(
-        appBar: buildAppBar(context, "Stats"),
+        appBar: buildAppBar(context, setState, "Stats"),
         drawer: buildDrawer(context),
         body: buildChart(profile, widget.liftId, widget.selectedStat));
   }

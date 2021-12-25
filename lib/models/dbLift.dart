@@ -58,7 +58,7 @@ class LiftHelper {
   }
 
   /// Gets only the biggest lift per day for a lift type
-  getHighestLiftsPerDay(int id) async {
+  Future<List<DbLift>> getHighestLiftsPerDay(int id) async {
     List<Map> lifts = await GLOBAL_DB!.rawQuery(
         'SELECT a.calculated1RM, a.date, a.id, a.weight, a.reps FROM lift a INNER JOIN(SELECT MAX(calculated1RM) as calculated1RM, date, id FROM lift WHERE ID = $id GROUP BY id, date) b ON a.id = b.id and a.calculated1RM = b.calculated1RM');
     return List.generate(lifts.length, (i) => DbLift.fromMap(lifts[i]));
@@ -80,6 +80,14 @@ class LiftHelper {
       result[e['id']] = e['calculated1RM'];
     });
     return result;
+  }
+
+  /// Delete all lifts for a specific day
+  Future<int> deleteLiftsPerDay(DateTime date) async {
+    int c = await GLOBAL_DB!.delete('Lift',
+        where: 'date = ?', whereArgs: [date.millisecondsSinceEpoch]);
+    print("[DB]: $c lifts deleted from the DB.");
+    return c;
   }
 
   /// Update specific lift

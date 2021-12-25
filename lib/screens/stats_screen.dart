@@ -23,8 +23,7 @@ class _StatsScreenState extends State<StatsScreen> {
   Widget build(BuildContext context) {
     var profile = Provider.of<UserProfile>(context);
     return Scaffold(
-        appBar: buildAppBar(context, "Stats"),
-        drawer: buildDrawer(context),
+        appBar: buildAppBar(context, setState, "Stats"),
         body: buildCharts(profile));
   }
 
