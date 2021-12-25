@@ -47,8 +47,11 @@ class AssistanceLiftHelper {
       int relatedCoreExerciseId) async {
     List<Map> assistanceExercises = await GLOBAL_DB!.query('assistance',
         where: 'relatedCoreExerciseId = ?', whereArgs: [relatedCoreExerciseId]);
-    return List.generate(assistanceExercises.length,
-        (i) => AssistanceExercise.fromMap(assistanceExercises[i]));
+    if (assistanceExercises.length != 0) {
+      return List.generate(assistanceExercises.length,
+          (i) => AssistanceExercise.fromMap(assistanceExercises[i]));
+    } else
+      return [];
   }
 
   /// Deletes all assistance exercises for a core lift
