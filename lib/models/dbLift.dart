@@ -82,6 +82,14 @@ class LiftHelper {
     return result;
   }
 
+  /// Delete all lifts for a specific day
+  Future<int> deleteLiftsPerDay(DateTime date) async {
+    int c = await GLOBAL_DB!.delete('Lift',
+        where: 'date = ?', whereArgs: [date.millisecondsSinceEpoch]);
+    print("[DB]: $c lifts deleted from the DB.");
+    return c;
+  }
+
   /// Update specific lift
   updateLift(DbLift originalLift, String newReps, String newWeight) async {
     DbLift newLift = DbLift(originalLift.id, originalLift.date,

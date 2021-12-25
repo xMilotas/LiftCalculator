@@ -92,7 +92,7 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
                       customHeight: 250 + (stats.length * 16)),
                   Positioned(
                     right: 20,
-                    bottom: 24,
+                    bottom: 20,
                     child: IconButton(
                         icon: Icon(Icons.edit),
                         color: Colors.white,
@@ -100,6 +100,15 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
                               MaterialPageRoute(
                                   builder: (context) => EditLiftsScreen(data)),
                             ))),
+                  ),
+                   Positioned(
+                    right: 20,
+                    bottom: 50,
+                    child: IconButton(
+                        icon: Icon(Icons.delete),
+                        color: Colors.white,
+                        onPressed: () => LiftHelper().deleteLiftsPerDay(_selectedDate).then((_) => setState(() {})),
+                            ),
                   ),
                 ],
               );
