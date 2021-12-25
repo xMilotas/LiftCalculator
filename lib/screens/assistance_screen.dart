@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/databaseLoadIndicator.dart';
