@@ -30,7 +30,8 @@ class _StatsPerDayScreenState extends State<EditLiftsScreen> {
           TextEditingController(text: lift.weightRep.weight.toString()));
     }
     return Scaffold(
-      appBar: buildAppBar(context, setState, "Edit ${widget.selectedLift[0].date}"),
+      appBar:
+          buildAppBar(context, setState, "Edit ${widget.selectedLift[0].date}"),
       drawer: buildDrawer(context),
       body: ListView(children: [
         ...widget.selectedLift
@@ -66,6 +67,22 @@ class _StatsPerDayScreenState extends State<EditLiftsScreen> {
               var weight = controllers[element]!.weightController.text;
               // Update DB
               LiftHelper().updateLift(element, reps, weight);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  backgroundColor: Colors.blueGrey,
+                  content: const Text('Successfully saved'),
+                  duration: const Duration(milliseconds: 1500),
+                  width: 280.0, // Width of the SnackBar.
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 8.0, // Inner padding for SnackBar content.
+                  ),
+                  behavior: SnackBarBehavior.floating,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                ),
+              );
+              Navigator.pop(context);
             })
           },
           child: Text('Save'),

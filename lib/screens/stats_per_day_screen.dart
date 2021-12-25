@@ -99,7 +99,7 @@ class _StatsPerDayScreenState extends State<StatsPerDayScreen> {
                         onPressed: () => (Navigator.of(context).push(
                               MaterialPageRoute(
                                   builder: (context) => EditLiftsScreen(data)),
-                            ))),
+                            ).then((_) => setState(() {})))),
                   ),
                    Positioned(
                     right: 20,
