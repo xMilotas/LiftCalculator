@@ -73,8 +73,14 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
-      body: Center(child: Image.asset('graphics/splash.png')),
+      backgroundColor: Color(0xFF00121D),
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        decoration: BoxDecoration(
+        image: DecorationImage(
+          image: AssetImage("graphics/icon.png"), fit: BoxFit.scaleDown),
+        )
+    ),
     );
   }
 }
