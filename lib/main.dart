@@ -77,11 +77,20 @@ class Splash extends StatelessWidget {
       backgroundColor: Color(0xFF00121D),
       body: Container(
         constraints: BoxConstraints.expand(),
-        decoration: BoxDecoration(
-        image: DecorationImage(
-          image: AssetImage("graphics/icon.png"), fit: BoxFit.scaleDown),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+              child: Image.asset("graphics/icon.png"),
+              ),
+              Padding(padding: EdgeInsets.only(top: 20.0)),
+
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color> (Colors.white),
+              )
+            ]
         )
-    ),
+      )
     );
   }
 }
