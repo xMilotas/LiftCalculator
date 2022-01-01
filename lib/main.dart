@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//TODO: exclude all the widgets imports
 import 'package:flutter/widgets.dart';
 import 'package:liftcalculator/models/changeLiftDialog.dart';
 import 'package:liftcalculator/models/dbLift.dart';
