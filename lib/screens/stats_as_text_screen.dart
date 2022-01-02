@@ -3,11 +3,9 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/databaseLoadIndicator.dart';
-import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/profile.dart';
 import 'package:liftcalculator/models/selectedLift.dart';
-import 'package:liftcalculator/util/globals.dart';
 import 'package:provider/provider.dart';
 
 class StatsTextScreen extends StatefulWidget {

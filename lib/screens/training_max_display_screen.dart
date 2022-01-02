@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/dbTrainingMax.dart';
-import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/profile.dart';
 
-import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 
 class TrainingMaxScreen extends StatefulWidget {

@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/card.dart';
 import 'package:liftcalculator/models/databaseLoadIndicator.dart';
-import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/lift.dart';
 import 'package:liftcalculator/util/assistance.dart';
 import 'package:liftcalculator/util/globals.dart';
