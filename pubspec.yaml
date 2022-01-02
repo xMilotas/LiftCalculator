@@ -50,7 +50,7 @@ flutter_icons:
 
 flutter_native_splash:
 # overwrites the white primary splash screen
-  color: "#00121D"
+  color: 00121D
 # for now without image - might be added back with a custom secondary splash screen
 # image: graphics/icon.png
   android: true
