@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:liftcalculator/models/appBar.dart';
 import 'package:liftcalculator/models/databaseLoadIndicator.dart';
 import 'package:liftcalculator/models/dbTrainingMax.dart';
-import 'package:liftcalculator/models/drawer.dart';
 import 'package:liftcalculator/models/dbLift.dart';
 import 'package:liftcalculator/models/profile.dart';
 import 'package:liftcalculator/models/liftChart.dart';
