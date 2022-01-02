@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//TODO: exclude all the widgets imports
 import 'package:flutter/widgets.dart';
 import 'package:liftcalculator/models/changeLiftDialog.dart';
 import 'package:liftcalculator/models/dbLift.dart';
@@ -73,8 +74,23 @@ class Splash extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
-      body: Center(child: Image.asset('graphics/splash.png')),
+      backgroundColor: Color(0xFF00121D),
+      body: Container(
+        constraints: BoxConstraints.expand(),
+        child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+              child: Image.asset("graphics/icon.png"),
+              ),
+              Padding(padding: EdgeInsets.only(top: 20.0)),
+
+              CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color> (Colors.white),
+              )
+            ]
+        )
+      )
     );
   }
 }
